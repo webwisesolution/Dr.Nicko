@@ -1,182 +1,2510 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Brick Breaker Game</title>
-  <style>
-    body {
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    #scoreboard {
-      color: #fff;
-      text-align: center;
-      font-size: 2em;
-      margin-bottom: 10px;
-      font-family: 'Consolas', monospace;
-    }
-    canvas {
-      background: #222;
-      border: 3px solid #fff;
-      border-radius: 8px;
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Nicko | Your Health, Our Priority</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Colors */
+        :root {
+            --primary: #14B8A6;
+            --primary-dark: #0D9488;
+            --secondary: #0F172A;
+            --accent: #E0F7FA;
+            --background: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section {
+            padding: 60px 0; /* Reduced padding to minimize white space */
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem; /* Reduced margin */
+            position: relative;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(20, 184, 166, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(20, 184, 166, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #1E293B;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 30px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 10px var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active:after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--accent) 0%, white 100%);
+            padding: 120px 0 80px; /* Reduced padding */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 600px;
+            animation: fadeInLeft 1s ease;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+            animation: fadeInRight 1s ease;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-highlights {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px; /* Reduced margin */
+            flex-wrap: wrap;
+        }
+
+        .highlight {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+        }
+
+        .highlight-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--primary);
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .highlight:hover .highlight-icon {
+            background-color: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            background-color: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .service-detail {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .service-detail.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        /* About Section */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-image img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .qualifications {
+            margin-top: 30px;
+        }
+
+        .qualification-item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .qualification-item:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Testimonials */
+        .testimonials-container {
+            max-width: 1200px; /* Increased width */
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial-slider {
+            display: flex;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            margin-bottom: 30px;
+        }
+
+        .testimonial-card {
+            text-align: center;
+            padding: 30px; /* Reduced padding */
+            margin: 10px; /* Reduced margin */
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            min-width: 350px; /* Fixed width for consistent cards */
+            flex-shrink: 0;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px; /* Reduced margin */
+            font-size: 1rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .stars {
+            color: #FFC107;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .testimonial-dot.active {
+            background-color: var(--primary);
+        }
+
+        /* Appointment Section */
+        .appointment {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .appointment h2 {
+            color: white;
+        }
+
+        .appointment h2:after {
+            background-color: white;
+        }
+
+        .appointment p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .appointment-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .appointment-option {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            width: 280px;
+            transition: all 0.3s ease;
+        }
+
+        .appointment-option:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .appointment-option i {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .appointment-option h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .appointment-form {
+            max-width: 600px;
+            margin: 40px auto 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-control:focus {
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: flex;
+            gap: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            flex: 1;
+        }
+
+        .map-container {
+            margin-top: 40px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 300px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .footer-links h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .blog-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-image {
+            height: 200px;
+            overflow: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+
+        .blog-content {
+            padding: 25px;
+        }
+
+        .blog-meta {
+            display: flex;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .blog-date {
+            margin-right: 15px;
+        }
+
+        .blog-category {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .blog-excerpt {
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-full {
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .blog-full.active {
+            display: block;
+        }
+
+        .blog-header {
+            margin-bottom: 30px;
+        }
+
+        .blog-featured-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .blog-content-full {
+            line-height: 1.8;
+        }
+
+        .back-to-blog {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-to-blog:hover {
+            text-decoration: underline;
+        }
+
+        /* Chat Assistant */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .chat-container.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: white;
+            margin: 0;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background-color: var(--primary);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            color: var(--text);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            opacity: 0.7;
+            text-align: right;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .chat-input button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chat-toggle:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .chat-toggle i {
+            font-size: 1.5rem;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            padding: 12px 15px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .quick-reply {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            gap: 8px;
+        }
+
+        .quick-reply-btn {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 15px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-reply-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h2 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                margin-bottom: 50px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .contact-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .appointment-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .chat-container {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+            
+            .testimonial-card {
+                min-width: 280px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            section {
+                padding: 50px 0; /* Further reduced padding */
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero {
+                padding: 100px 0 60px; /* Further reduced padding */
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div>
-    <div id="scoreboard">Score: 0</div>
-    <canvas id="gameCanvas" width="480" height="320"></canvas>
-  </div>
-  <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const scoreboard = document.getElementById('scoreboard');
-    const width = canvas.width;
-    const height = canvas.height;
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo" data-page="home">
+                <i class="fas fa-stethoscope"></i>
+                Doctor Nicko
+            </a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#" data-page="home" class="active">Home</a></li>
+                <li><a href="#" data-page="about">About</a></li>
+                <li><a href="#" data-page="services">Services</a></li>
+                <li><a href="#" data-page="appointment">Appointments</a></li>
+                <li><a href="#" data-page="testimonials">Testimonials</a></li>
+                <li><a href="#" data-page="blog">Blog</a></li>
+                <li><a href="#" data-page="contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    // Paddle
-    const paddleHeight = 12;
-    const paddleWidth = 75;
-    let paddleX = (width - paddleWidth) / 2;
-    const paddleSpeed = 7;
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h1>Your Health, Our Priority</h1>
+                    <p>Dr. Nicko – Trusted General Practitioner with over 15 years of experience providing compassionate care for every patient.</p>
+                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
+                    
+                    <div class="service-highlights">
+                        <div class="highlight">
+                            <div class="highlight-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h4>Check-ups</h4>
+                        </div>
+                        <div class="highlight">
+                            <div class="highlight-icon">
+                                <i class="fas fa-diagnoses"></i>
+                            </div>
+                            <h4>Diagnosis</h4>
+                        </div>
+                        <div class="highlight">
+                            <div class="highlight-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h4>Consultations</h4>
+                        </div>
+                        <div class="highlight">
+                            <div class="highlight-icon">
+                                <i class="fas fa-syringe"></i>
+                            </div>
+                            <h4>Vaccinations</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Doctor Nicko">
+                </div>
+            </div>
+        </section>
 
-    // Ball
-    let x = width / 2;
-    let y = height - 30;
-    let dx = 2.5;
-    let dy = -2.5;
-    const ballRadius = 8;
+        <!-- About Preview Section -->
+        <section class="about-preview">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-image fade-in">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Doctor Nicko">
+                    </div>
+                    <div class="about-text fade-in">
+                        <h2>Meet Doctor Nicko</h2>
+                        <p>Dr. Nicko is a board-certified general practitioner with over 15 years of experience in family medicine. He completed his medical degree at Johns Hopkins University and completed his residency at Mayo Clinic.</p>
+                        <p>Dr. Nicko believes in building long-term relationships with his patients and providing comprehensive care that addresses both immediate health concerns and long-term wellness goals.</p>
+                        <a href="#" class="btn" data-page="about">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    // Bricks
-    const brickRowCount = 5;
-    const brickColumnCount = 7;
-    const brickWidth = 55;
-    const brickHeight = 18;
-    const brickPadding = 8;
-    const brickOffsetTop = 40;
-    const brickOffsetLeft = 15;
-    let bricks = [];
-    for(let c = 0; c < brickColumnCount; c++) {
-      bricks[c] = [];
-      for(let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
-      }
-    }
+        <!-- Trust Section -->
+        <section class="trust">
+            <div class="container">
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Years Experience</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">5000+</span>
+                        <span class="stat-label">Patients Treated</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Patient Satisfaction</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
-    // Controls
-    let rightPressed = false;
-    let leftPressed = false;
+    <!-- About Page -->
+    <div id="about" class="page">
+        <section class="about">
+            <div class="container">
+                <h2>About Doctor Nicko</h2>
+                <div class="about-content">
+                    <div class="about-image fade-in">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Doctor Nicko">
+                    </div>
+                    <div class="about-text fade-in">
+                        <h3>Compassionate Care for Every Patient</h3>
+                        <p>Dr. Nicko is a board-certified general practitioner with over 15 years of experience in family medicine. He completed his medical degree at Johns Hopkins University and completed his residency at Mayo Clinic.</p>
+                        <p>Dr. Nicko believes in building long-term relationships with his patients and providing comprehensive care that addresses both immediate health concerns and long-term wellness goals.</p>
+                        
+                        <h3>Education & Certifications</h3>
+                        <div class="qualifications">
+                            <div class="qualification-item">Doctor of Medicine (M.D.) - Johns Hopkins University</div>
+                            <div class="qualification-item">Board Certified in Family Medicine</div>
+                            <div class="qualification-item">Advanced Cardiac Life Support (ACLS) Certified</div>
+                            <div class="qualification-item">Pediatric Advanced Life Support (PALS) Certified</div>
+                            <div class="qualification-item">Member, American Academy of Family Physicians</div>
+                        </div>
+                        
+                        <h3>Treatment Philosophy</h3>
+                        <p>"My approach to medicine is simple: treat every patient with the same care and compassion I would want for my own family. I believe in listening carefully, explaining clearly, and partnering with patients to achieve their health goals."</p>
+                        
+                        <a href="#" class="btn" data-page="appointment">Book Appointment Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
-    document.addEventListener("keydown", keyDownHandler);
-    document.addEventListener("keyup", keyUpHandler);
-    canvas.addEventListener("mousemove", mouseMoveHandler);
+    <!-- Services Page -->
+    <div id="services" class="page">
+        <section class="services">
+            <div class="container">
+                <h2>Our Services</h2>
+                <p class="text-center">Comprehensive medical care for the entire family. From routine check-ups to specialized treatments, we're here to support your health journey.</p>
+                
+                <div class="services-grid">
+                    <div class="card service-card fade-in">
+                        <div class="service-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>General Check-Ups</h3>
+                        <p>Comprehensive health examinations to monitor your well-being and detect potential issues early.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="checkups">Learn More</button>
+                        <div class="service-detail" id="checkups-detail">
+                            <p>Our general check-ups include:</p>
+                            <ul>
+                                <li>Complete physical examination</li>
+                                <li>Blood pressure and vital signs check</li>
+                                <li>Blood tests for cholesterol, glucose, and more</li>
+                                <li>Health risk assessment</li>
+                                <li>Personalized health recommendations</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card service-card fade-in">
+                        <div class="service-icon">
+                            <i class="fas fa-diagnoses"></i>
+                        </div>
+                        <h3>Diagnosis & Treatment</h3>
+                        <p>Expert evaluation and treatment of common conditions with personalized care plans.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="diagnosis">Learn More</button>
+                        <div class="service-detail" id="diagnosis-detail">
+                            <p>We diagnose and treat a wide range of conditions including:</p>
+                            <ul>
+                                <li>Respiratory infections (cold, flu, bronchitis)</li>
+                                <li>Chronic conditions (hypertension, diabetes, asthma)</li>
+                                <li>Skin conditions and rashes</li>
+                                <li>Digestive issues</li>
+                                <li>Musculoskeletal pain and injuries</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card service-card fade-in">
+                        <div class="service-icon">
+                            <i class="fas fa-syringe"></i>
+                        </div>
+                        <h3>Vaccinations</h3>
+                        <p>Immunizations for adults and children to protect against preventable diseases.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="vaccinations">Learn More</button>
+                        <div class="service-detail" id="vaccinations-detail">
+                            <p>We offer a comprehensive range of vaccinations:</p>
+                            <ul>
+                                <li>Childhood immunization schedule</li>
+                                <li>Flu vaccines (seasonal)</li>
+                                <li>Travel vaccinations</li>
+                                <li>HPV vaccine</li>
+                                <li>Pneumonia and shingles vaccines</li>
+                                <li>COVID-19 vaccines and boosters</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card service-card fade-in">
+                        <div class="service-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3>Health Counseling</h3>
+                        <p>Lifestyle guidance and preventive care strategies tailored to your health needs.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="counseling">Learn More</button>
+                        <div class="service-detail" id="counseling-detail">
+                            <p>Our health counseling services include:</p>
+                            <ul>
+                                <li>Nutrition and weight management</li>
+                                <li>Exercise and fitness planning</li>
+                                <li>Stress management techniques</li>
+                                <li>Smoking cessation support</li>
+                                <li>Chronic disease management education</li>
+                                <li>Mental health and wellness support</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card service-card fade-in">
+                        <div class="service-icon">
+                            <i class="fas fa-procedures"></i>
+                        </div>
+                        <h3>Minor Procedures</h3>
+                        <p>In-office minor surgical procedures for convenience and quick recovery.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="procedures">Learn More</button>
+                        <div class="service-detail" id="procedures-detail">
+                            <p>We perform various minor procedures including:</p>
+                            <ul>
+                                <li>Skin lesion removal</li>
+                                <li>Wart treatment and removal</li>
+                                <li>Joint injections</li>
+                                <li>Minor laceration repair</li>
+                                <li>Ingrown toenail treatment</li>
+                                <li>Abscess drainage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card service-card fade-in">
+                        <div class="service-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h3>Health Screenings</h3>
+                        <p>Comprehensive screening tests to detect health issues before symptoms appear.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="screenings">Learn More</button>
+                        <div class="service-detail" id="screenings-detail">
+                            <p>We offer various health screenings:</p>
+                            <ul>
+                                <li>Cardiovascular risk assessment</li>
+                                <li>Cancer screenings (skin, colon, prostate, breast)</li>
+                                <li>Bone density testing</li>
+                                <li>Vision and hearing tests</li>
+                                <li>Diabetes screening</li>
+                                <li>Thyroid function tests</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center" style="margin-top: 40px;">
+                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
+                </div>
+            </div>
+        </section>
+    </div>
 
-    function keyDownHandler(e) {
-      if(e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
-      else if(e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
-    }
-    function keyUpHandler(e) {
-      if(e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
-      else if(e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
-    }
-    function mouseMoveHandler(e) {
-      const rect = canvas.getBoundingClientRect();
-      let relX = e.clientX - rect.left;
-      if(relX > 0 && relX < width) {
-        paddleX = Math.min(width - paddleWidth, Math.max(0, relX - paddleWidth/2));
-      }
-    }
+    <!-- Appointment Page -->
+    <div id="appointment" class="page">
+        <section class="appointment">
+            <div class="container">
+                <h2>Book an Appointment</h2>
+                <p>Choose the most convenient way to schedule your visit with Dr. Nicko. We offer flexible booking options to fit your busy lifestyle.</p>
+                
+                <div class="appointment-options">
+                    <div class="appointment-option fade-in">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Online Form</h3>
+                        <p>Fill out our simple appointment request form and we'll contact you to confirm.</p>
+                        <a href="#" class="btn btn-secondary" id="show-form-btn">Book Online</a>
+                    </div>
+                    <div class="appointment-option fade-in">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Assistant</h3>
+                        <p>Chat with our AI assistant for quick appointment scheduling and health questions.</p>
+                        <a href="#" class="btn btn-secondary" id="chat-assistant-btn">Message Now</a>
+                    </div>
+                    <div class="appointment-option fade-in">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone Call</h3>
+                        <p>Call our clinic directly during business hours to book your appointment.</p>
+                        <a href="tel:+1234567890" class="btn btn-secondary">Call Now</a>
+                    </div>
+                </div>
+                
+                <div class="appointment-form" id="appointment-form" style="display: none;">
+                    <h3>Appointment Request Form</h3>
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" placeholder="Your Phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Service Needed</label>
+                            <select id="service" class="form-control" required>
+                                <option value="">Select a service</option>
+                                <option value="checkup">General Check-up</option>
+                                <option value="diagnosis">Diagnosis & Treatment</option>
+                                <option value="vaccination">Vaccination</option>
+                                <option value="counseling">Health Counseling</option>
+                                <option value="procedure">Minor Procedure</option>
+                                <option value="screening">Health Screening</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Preferred Date</label>
+                            <input type="date" id="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Additional Information</label>
+                            <textarea id="message" class="form-control" placeholder="Any specific concerns or preferences"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Submit Request</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
 
-    let score = 0;
+    <!-- Testimonials Page -->
+    <div id="testimonials" class="page">
+        <section class="testimonials">
+            <div class="container">
+                <h2>Patient Testimonials</h2>
+                <p class="text-center">Hear what our patients have to say about their experience with Dr. Nicko and our practice.</p>
+                
+                <div class="testimonials-container">
+                    <div class="testimonial-slider" id="testimonial-slider">
+                        <!-- Testimonial 1 -->
+                        <div class="testimonial-card fade-in active-testimonial">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Dr. Nicko really takes time to listen. I felt cared for and understood during my entire treatment. His approach is both professional and compassionate."</p>
+                            <p class="testimonial-author">- Sarah Johnson</p>
+                        </div>
+                        
+                        <!-- Testimonial 2 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"I've been a patient of Dr. Nicko for over 10 years. He remembers details about my health history and always provides thoughtful, personalized care."</p>
+                            <p class="testimonial-author">- Michael Thompson</p>
+                        </div>
+                        
+                        <!-- Testimonial 3 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p class="testimonial-text">"The entire staff is friendly and efficient. Wait times are minimal, and Dr. Nicko explains everything in terms I can understand. Highly recommended!"</p>
+                            <p class="testimonial-author">- Jennifer Lee</p>
+                        </div>
+                        
+                        <!-- Testimonial 4 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"After struggling with chronic migraines for years, Dr. Nicko found the root cause and developed a treatment plan that actually works. I finally have my life back!"</p>
+                            <p class="testimonial-author">- David Rodriguez</p>
+                        </div>
+                        
+                        <!-- Testimonial 5 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Dr. Nicko treated my whole family for years. He's knowledgeable, patient, and genuinely cares about our wellbeing. We wouldn't trust anyone else with our health."</p>
+                            <p class="testimonial-author">- Maria Garcia</p>
+                        </div>
+                        
+                        <!-- Testimonial 6 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"I was nervous about my first physical in years, but Dr. Nicko made me feel completely at ease. He explained everything clearly and didn't rush through the appointment."</p>
+                            <p class="testimonial-author">- James Wilson</p>
+                        </div>
+                        
+                        <!-- Testimonial 7 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p class="testimonial-text">"Dr. Nicko helped me manage my diabetes better than any other doctor I've seen. His practical advice and ongoing support have made a real difference in my health."</p>
+                            <p class="testimonial-author">- Patricia Brown</p>
+                        </div>
+                        
+                        <!-- Testimonial 8 -->
+                        <div class="testimonial-card fade-in">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"As a senior patient, I appreciate how Dr. Nicko takes the time to address all my concerns without making me feel rushed. He's truly one of a kind."</p>
+                            <p class="testimonial-author">- Robert Davis</p>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-nav">
+                        <div class="testimonial-dot active" data-testimonial="0"></div>
+                        <div class="testimonial-dot" data-testimonial="1"></div>
+                        <div class="testimonial-dot" data-testimonial="2"></div>
+                        <div class="testimonial-dot" data-testimonial="3"></div>
+                        <div class="testimonial-dot" data-testimonial="4"></div>
+                        <div class="testimonial-dot" data-testimonial="5"></div>
+                        <div class="testimonial-dot" data-testimonial="6"></div>
+                        <div class="testimonial-dot" data-testimonial="7"></div>
+                    </div>
+                </div>
+                
+                <div class="text-center" style="margin-top: 40px;">
+                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
+                </div>
+            </div>
+        </section>
+    </div>
 
-    function drawBall() {
-      ctx.beginPath();
-      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-      ctx.fillStyle = "#0ff";
-      ctx.fill();
-      ctx.closePath();
-    }
-    function drawPaddle() {
-      ctx.beginPath();
-      ctx.rect(paddleX, height - paddleHeight, paddleWidth, paddleHeight);
-      ctx.fillStyle = "#fff";
-      ctx.fill();
-      ctx.closePath();
-    }
-    function drawBricks() {
-      for(let c = 0; c < brickColumnCount; c++) {
-        for(let r = 0; r < brickRowCount; r++) {
-          if(bricks[c][r].status === 1) {
-            let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-            let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-            bricks[c][r].x = brickX;
-            bricks[c][r].y = brickY;
-            ctx.beginPath();
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = `hsl(${50 + r*30}, 80%, 60%)`;
-            ctx.fill();
-            ctx.closePath();
-          }
-        }
-      }
-    }
-    function collisionDetection() {
-      for(let c = 0; c < brickColumnCount; c++) {
-        for(let r = 0; r < brickRowCount; r++) {
-          let b = bricks[c][r];
-          if(b.status === 1) {
-            if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-              dy = -dy;
-              b.status = 0;
-              score++;
-              scoreboard.textContent = "Score: " + score;
-              if(score === brickRowCount * brickColumnCount) {
-                alert("You WIN! Congratulations!");
-                document.location.reload();
-              }
+    <!-- Blog Page -->
+    <div id="blog" class="page">
+        <section class="blog">
+            <div class="container">
+                <h2>Health & Wellness Blog</h2>
+                <p class="text-center">Stay informed with the latest health tips, medical insights, and wellness advice from Dr. Nicko.</p>
+                
+                <div class="blog-grid">
+                    <!-- Blog Post 1 -->
+                    <div class="card blog-card fade-in">
+                        <div class="blog-image">
+                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Healthy Heart">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">May 15, 2025</span>
+                                <span class="blog-category">Cardiology</span>
+                            </div>
+                            <h3>5 Simple Ways to Keep Your Heart Healthy</h3>
+                            <p class="blog-excerpt">Heart disease remains the leading cause of death worldwide, but many risk factors are preventable. Discover five evidence-based strategies to maintain optimal heart health and reduce your risk of cardiovascular disease.</p>
+                            <a href="#" class="btn btn-outline read-more-btn" data-blog="1">Read More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Post 2 -->
+                    <div class="card blog-card fade-in">
+                        <div class="blog-image">
+                            <img src="https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Immune System">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">April 28, 2025</span>
+                                <span class="blog-category">Immunology</span>
+                            </div>
+                            <h3>Boosting Your Immune System Naturally</h3>
+                            <p class="blog-excerpt">Your immune system is your body's defense against infections and diseases. Learn about scientifically-backed ways to strengthen your immune response through nutrition, lifestyle changes, and proper sleep habits.</p>
+                            <a href="#" class="btn btn-outline read-more-btn" data-blog="2">Read More</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Post 3 -->
+                    <div class="card blog-card fade-in">
+                        <div class="blog-image">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Mental Health">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">April 10, 2025</span>
+                                <span class="blog-category">Mental Health</span>
+                            </div>
+                            <h3>The Mind-Body Connection: Managing Stress Effectively</h3>
+                            <p class="blog-excerpt">Chronic stress can have profound effects on both mental and physical health. Explore practical techniques for stress management and understand how mental wellbeing directly impacts your physical health.</p>
+                            <a href="#" class="btn btn-outline read-more-btn" data-blog="3">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Full Blog Articles (hidden by default) -->
+                <div class="blog-full" id="blog-1">
+                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    <div class="blog-header">
+                        <div class="blog-meta">
+                            <span class="blog-date">May 15, 2025</span>
+                            <span class="blog-category">Cardiology</span>
+                        </div>
+                        <h2>5 Simple Ways to Keep Your Heart Healthy</h2>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Healthy Heart" class="blog-featured-image">
+                    <div class="blog-content-full">
+                        <p>Heart disease remains the leading cause of death worldwide, but the good news is that many risk factors are preventable. By making simple lifestyle changes, you can significantly reduce your risk of developing cardiovascular problems. Here are five evidence-based strategies to maintain optimal heart health.</p>
+                        
+                        <h3>1. Adopt a Heart-Healthy Diet</h3>
+                        <p>A balanced diet rich in fruits, vegetables, whole grains, and lean proteins can work wonders for your cardiovascular system. Focus on incorporating foods high in fiber and antioxidants while limiting saturated fats, trans fats, and sodium. The Mediterranean diet, in particular, has been extensively studied and shown to reduce heart disease risk by up to 30%.</p>
+                        
+                        <h3>2. Stay Physically Active</h3>
+                        <p>Regular exercise strengthens your heart muscle, improves circulation, and helps maintain a healthy weight. Aim for at least 150 minutes of moderate-intensity aerobic activity or 75 minutes of vigorous activity each week. Even simple activities like brisk walking, cycling, or swimming can make a significant difference in your heart health.</p>
+                        
+                        <h3>3. Maintain a Healthy Weight</h3>
+                        <p>Excess weight, particularly around the abdomen, puts additional strain on your heart and increases your risk of high blood pressure, high cholesterol, and type 2 diabetes. Even a modest weight loss of 5-10% of your body weight can improve blood pressure, cholesterol levels, and reduce inflammation.</p>
+                        
+                        <h3>4. Don't Smoke and Limit Alcohol</h3>
+                        <p>Smoking is one of the most significant risk factors for heart disease. Chemicals in tobacco can damage your heart and blood vessels, leading to narrowed arteries (atherosclerosis). If you smoke, quitting is the single best thing you can do for your heart. Additionally, limit alcohol consumption to moderate levels – no more than one drink per day for women and two for men.</p>
+                        
+                        <h3>5. Manage Stress and Get Quality Sleep</h3>
+                        <p>Chronic stress and poor sleep can contribute to high blood pressure and other heart disease risk factors. Practice stress-reduction techniques such as meditation, deep breathing, or yoga. Aim for 7-9 hours of quality sleep per night, as sleep allows your heart to rest and repair.</p>
+                        
+                        <p>Remember, small changes can lead to significant improvements in your heart health over time. Consult with your healthcare provider before making major lifestyle changes, especially if you have existing health conditions.</p>
+                    </div>
+                </div>
+                
+                <div class="blog-full" id="blog-2">
+                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    <div class="blog-header">
+                        <div class="blog-meta">
+                            <span class="blog-date">April 28, 2025</span>
+                            <span class="blog-category">Immunology</span>
+                        </div>
+                        <h2>Boosting Your Immune System Naturally</h2>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Immune System" class="blog-featured-image">
+                    <div class="blog-content-full">
+                        <p>Your immune system is a complex network of cells, tissues, and organs that work together to defend your body against harmful pathogens. While no magic pill can "boost" your immunity overnight, several lifestyle factors can help optimize your immune function. Here's what the science says about naturally supporting your body's defense system.</p>
+                        
+                        <h3>Nutrition for Immunity</h3>
+                        <p>A well-balanced diet provides the essential nutrients your immune system needs to function properly. Key nutrients include:</p>
+                        <ul>
+                            <li><strong>Vitamin C:</strong> Found in citrus fruits, bell peppers, and broccoli, it supports various cellular functions of both innate and adaptive immune systems.</li>
+                            <li><strong>Vitamin D:</strong> Crucial for immune function; consider supplements if you have limited sun exposure.</li>
+                            <li><strong>Zinc:</strong> Found in lean meats, seafood, and legumes, it helps immune cells develop and communicate.</li>
+                            <li><strong>Probiotics:</strong> Fermented foods like yogurt and kimchi support gut health, where about 70% of your immune system resides.</li>
+                        </ul>
+                        
+                        <h3>The Importance of Sleep</h3>
+                        <p>During sleep, your body produces and distributes key immune cells like cytokines, T cells, and interleukin 12. Chronic sleep deprivation can make you more susceptible to illnesses. Adults should aim for 7-9 hours of quality sleep per night to support optimal immune function.</p>
+                        
+                        <h3>Exercise Moderately</h3>
+                        <p>Regular, moderate exercise can reduce inflammation and help immune cells regenerate regularly. However, intense, prolonged exercise without adequate recovery can temporarily suppress immune function. Aim for a balanced approach with both cardio and strength training.</p>
+                        
+                        <h3>Stress Management</h3>
+                        <p>Chronic stress suppresses the immune response by releasing the hormone cortisol. Incorporate stress-reduction practices such as meditation, deep breathing exercises, or mindfulness into your daily routine to keep your immune system functioning at its best.</p>
+                        
+                        <h3>Other Lifestyle Factors</h3>
+                        <p>Additional ways to support your immune system include:</p>
+                        <ul>
+                            <li>Maintaining a healthy weight</li>
+                            <li>Avoiding smoking and limiting alcohol consumption</li>
+                            <li>Practicing good hygiene to prevent infections</li>
+                            <li>Staying up to date with recommended vaccinations</li>
+                        </ul>
+                        
+                        <p>Remember that a holistic approach works best when it comes to immune health. No single supplement or food can magically boost your immunity, but consistent healthy habits can significantly support your body's natural defenses.</p>
+                    </div>
+                </div>
+                
+                <div class="blog-full" id="blog-3">
+                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    <div class="blog-header">
+                        <div class="blog-meta">
+                            <span class="blog-date">April 10, 2025</span>
+                            <span class="blog-category">Mental Health</span>
+                        </div>
+                        <h2>The Mind-Body Connection: Managing Stress Effectively</h2>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mental Health" class="blog-featured-image">
+                    <div class="blog-content-full">
+                        <p>The connection between our mental and physical health is more profound than we often realize. Chronic stress doesn't just affect your mood—it can have tangible effects on your body, contributing to everything from digestive issues to cardiovascular problems. Understanding this mind-body connection is the first step toward managing stress effectively.</p>
+                        
+                        <h3>How Stress Affects Your Body</h3>
+                        <p>When you experience stress, your body releases hormones like cortisol and adrenaline. These hormones prepare your body for a "fight or flight" response. While this is helpful in short-term dangerous situations, chronic activation of this response can lead to:</p>
+                        <ul>
+                            <li>Elevated blood pressure and heart rate</li>
+                            <li>Weakened immune system</li>
+                            <li>Digestive problems</li>
+                            <li>Muscle tension and pain</li>
+                            <li>Sleep disturbances</li>
+                            <li>Weight changes</li>
+                        </ul>
+                        
+                        <h3>Effective Stress Management Techniques</h3>
+                        <p>Fortunately, there are many evidence-based approaches to managing stress:</p>
+                        
+                        <h4>Mindfulness and Meditation</h4>
+                        <p>Regular mindfulness practice can change how your brain responds to stress. Even just 10 minutes of daily meditation can help reduce anxiety and improve emotional regulation. Apps like Headspace or Calm can guide beginners through the process.</p>
+                        
+                        <h4>Physical Activity</h4>
+                        <p>Exercise is a powerful stress reliever. It increases endorphins (your brain's "feel-good" neurotransmitters) and can serve as a meditation in motion. Find an activity you enjoy, whether it's yoga, running, dancing, or simply walking in nature.</p>
+                        
+                        <h4>Social Connection</h4>
+                        <p>Strong social ties can act as a buffer against stress. Make time for meaningful connections with friends and family, and don't hesitate to seek support when you need it.</p>
+                        
+                        <h4>Time Management</h4>
+                        <p>Feeling overwhelmed by responsibilities can significantly contribute to stress. Learning to prioritize tasks, set boundaries, and say "no" when necessary can help create a more manageable schedule.</p>
+                        
+                        <h4>Professional Support</h4>
+                        <p>If stress feels unmanageable, consider speaking with a mental health professional. Therapy can provide valuable tools for coping with stress and addressing underlying issues.</p>
+                        
+                        <h3>Creating a Stress-Resilient Lifestyle</h3>
+                        <p>Beyond specific techniques, building a lifestyle that naturally buffers against stress is key. This includes:</p>
+                        <ul>
+                            <li>Maintaining a consistent sleep schedule</li>
+                            <li>Eating a balanced diet</li>
+                            <li>Limiting caffeine and alcohol</li>
+                            <li>Making time for hobbies and relaxation</li>
+                            <li>Practicing gratitude</li>
+                        </ul>
+                        
+                        <p>Remember that some stress is a normal part of life, and complete elimination isn't the goal. Instead, focus on developing healthy coping mechanisms and creating a lifestyle that supports both mental and physical wellbeing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <section class="contact">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <p class="text-center">Get in touch with us for any questions or to schedule your appointment. We're here to help!</p>
+                
+                <div class="contact-content">
+                    <div class="contact-info fade-in">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h3>Our Location</h3>
+                                <p>123 Medical Center Drive<br>Healthville, HV 12345</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h3>Phone Number</h3>
+                                <p>+1 (234) 567-8900</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h3>Email Address</h3>
+                                <p>info@doctornicko.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h3>Working Hours</h3>
+                                <p>Monday - Friday: 8:00 AM - 6:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-form fade-in">
+                        <h3>Send Us a Message</h3>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="contact-name">Full Name</label>
+                                <input type="text" id="contact-name" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email Address</label>
+                                <input type="email" id="contact-email" class="form-control" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-subject">Subject</label>
+                                <input type="text" id="contact-subject" class="form-control" placeholder="Message Subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-message">Message</label>
+                                <textarea id="contact-message" class="form-control" placeholder="Your Message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <div style="padding: 20px; text-align: center;">
+                        <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+                        <h3>Our Clinic Location</h3>
+                        <p>123 Medical Center Drive, Healthville, HV 12345</p>
+                        <a href="#" class="btn" style="margin-top: 15px;">Get Directions</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a href="#" class="footer-logo" data-page="home">Doctor Nicko</a>
+                    <p>Providing compassionate and comprehensive healthcare for over 15 years. Your health is our priority.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="services">Services</a></li>
+                        <li><a href="#" data-page="appointment">Appointments</a></li>
+                        <li><a href="#" data-page="testimonials">Testimonials</a></li>
+                        <li><a href="#" data-page="blog">Blog</a></li>
+                        <li><a href="#" data-page="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Our Services</h3>
+                    <ul>
+                        <li><a href="#" data-page="services">General Check-Ups</a></li>
+                        <li><a href="#" data-page="services">Diagnosis & Treatment</a></li>
+                        <li><a href="#" data-page="services">Vaccinations</a></li>
+                        <li><a href="#" data-page="services">Health Counseling</a></li>
+                        <li><a href="#" data-page="services">Minor Procedures</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Medical Center Drive</li>
+                        <li><i class="fas fa-phone"></i> +1 (234) 567-8900</li>
+                        <li><i class="fas fa-envelope"></i> info@doctornicko.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Doctor Nicko. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <div class="chat-toggle" id="chat-toggle">
+        <i class="fas fa-robot"></i>
+    </div>
+    
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header">
+            <h3>Dr. Nicko AI Assistant</h3>
+            <button class="close-chat" id="close-chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot">
+                Hello! I'm Dr. Nicko's AI assistant. How can I help you today? You can ask me about appointments, services, or general health questions.
+                <div class="message-time">Just now</div>
+                <div class="quick-reply">
+                    <button class="quick-reply-btn" data-reply="Book an appointment">Book an appointment</button>
+                    <button class="quick-reply-btn" data-reply="What services do you offer?">Services offered</button>
+                    <button class="quick-reply-btn" data-reply="What are your hours?">Clinic hours</button>
+                </div>
+            </div>
+        </div>
+        <div class="typing-indicator" id="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="send-message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Page Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set active page
+            function setActivePage(pageId) {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show selected page
+                document.getElementById(pageId).classList.add('active');
+                
+                // Update navigation
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector(`.nav-links a[data-page="${pageId}"]`).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // Trigger animations for elements with fade-in class
+                setTimeout(() => {
+                    document.querySelectorAll('.fade-in').forEach(element => {
+                        element.classList.add('appear');
+                    });
+                }, 100);
             }
-          }
-        }
-      }
-    }
-    function draw() {
-      ctx.clearRect(0, 0, width, height);
-      drawBricks();
-      drawBall();
-      drawPaddle();
-      collisionDetection();
-
-      // Ball movement
-      if(x + dx > width - ballRadius || x + dx < ballRadius) dx = -dx;
-      if(y + dy < ballRadius) dy = -dy;
-      else if(y + dy > height - ballRadius - paddleHeight) {
-        if(x > paddleX && x < paddleX + paddleWidth) {
-          dy = -dy;
-          // add some "spin" based on where it hits the paddle
-          let hitPoint = (x - (paddleX + paddleWidth/2)) / (paddleWidth/2);
-          dx += hitPoint * 1.2;
-        } else if(y + dy > height - ballRadius) {
-          alert("GAME OVER");
-          document.location.reload();
-        }
-      }
-
-      x += dx;
-      y += dy;
-
-      // Paddle movement
-      if(rightPressed && paddleX < width - paddleWidth) paddleX += paddleSpeed;
-      else if(leftPressed && paddleX > 0) paddleX -= paddleSpeed;
-
-      requestAnimationFrame(draw);
-    }
-
-    draw();
-  </script>
+            
+            // Navigation click handlers
+            document.querySelectorAll('[data-page]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    setActivePage(pageId);
+                });
+            });
+            
+            // Mobile menu toggle
+            document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+                document.querySelector('.nav-links').classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('.nav-links').classList.remove('active');
+                });
+            });
+            
+            // Service detail toggles
+            document.querySelectorAll('.learn-more-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const serviceId = this.getAttribute('data-service');
+                    const detailElement = document.getElementById(`${serviceId}-detail`);
+                    
+                    // Close all other service details
+                    document.querySelectorAll('.service-detail').forEach(detail => {
+                        if (detail !== detailElement) {
+                            detail.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current service detail
+                    detailElement.classList.toggle('active');
+                    
+                    // Change button text
+                    if (detailElement.classList.contains('active')) {
+                        this.textContent = 'Show Less';
+                    } else {
+                        this.textContent = 'Learn More';
+                    }
+                });
+            });
+            
+            // Testimonial slider
+            const testimonialDots = document.querySelectorAll('.testimonial-dot');
+            const testimonialSlider = document.getElementById('testimonial-slider');
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+            
+            testimonialDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const testimonialIndex = this.getAttribute('data-testimonial');
+                    
+                    // Update active dot
+                    testimonialDots.forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Scroll to corresponding testimonial
+                    testimonialSlider.scrollLeft = testimonialIndex * 370; // 350px card width + 20px margin
+                });
+            });
+            
+            // Auto-scroll testimonials
+            let currentTestimonial = 0;
+            const totalTestimonials = testimonialCards.length;
+            
+            function autoScrollTestimonials() {
+                currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+                testimonialSlider.scrollLeft = currentTestimonial * 370;
+                
+                // Update active dot
+                testimonialDots.forEach(d => d.classList.remove('active'));
+                if (testimonialDots[currentTestimonial]) {
+                    testimonialDots[currentTestimonial].classList.add('active');
+                }
+            }
+            
+            // Start auto-scroll if on testimonials page
+            let testimonialInterval;
+            document.querySelectorAll('[data-page="testimonials"]').forEach(link => {
+                link.addEventListener('click', function() {
+                    // Clear existing interval
+                    if (testimonialInterval) clearInterval(testimonialInterval);
+                    
+                    // Start new interval after a delay
+                    setTimeout(() => {
+                        testimonialInterval = setInterval(autoScrollTestimonials, 5000);
+                    }, 1000);
+                });
+            });
+            
+            // Stop auto-scroll when leaving testimonials page
+            document.querySelectorAll('[data-page]:not([data-page="testimonials"])').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (testimonialInterval) {
+                        clearInterval(testimonialInterval);
+                        testimonialInterval = null;
+                    }
+                });
+            });
+            
+            // Appointment form toggle
+            document.getElementById('show-form-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = document.getElementById('appointment-form');
+                if (form.style.display === 'none') {
+                    form.style.display = 'block';
+                    this.textContent = 'Hide Form';
+                } else {
+                    form.style.display = 'none';
+                    this.textContent = 'Book Online';
+                }
+            });
+            
+            // Blog functionality
+            const blogCards = document.querySelectorAll('.blog-card');
+            const blogFullArticles = document.querySelectorAll('.blog-full');
+            const readMoreButtons = document.querySelectorAll('.read-more-btn');
+            const backToBlogLinks = document.querySelectorAll('.back-to-blog');
+            
+            // Show full blog article
+            readMoreButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const blogId = this.getAttribute('data-blog');
+                    
+                    // Hide all blog cards and full articles
+                    blogCards.forEach(card => {
+                        card.style.display = 'none';
+                    });
+                    
+                    blogFullArticles.forEach(article => {
+                        article.classList.remove('active');
+                    });
+                    
+                    // Show the selected full article
+                    document.getElementById(`blog-${blogId}`).classList.add('active');
+                });
+            });
+            
+            // Back to blog list
+            backToBlogLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hide all full articles
+                    blogFullArticles.forEach(article => {
+                        article.classList.remove('active');
+                    });
+                    
+                    // Show all blog cards
+                    blogCards.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                });
+            });
+            
+            // Enhanced AI Chat Assistant
+            const chatToggle = document.getElementById('chat-toggle');
+            const chatContainer = document.getElementById('chat-container');
+            const closeChat = document.getElementById('close-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendMessage = document.getElementById('send-message');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const chatAssistantBtn = document.getElementById('chat-assistant-btn');
+            
+            // Conversation context
+            let conversationContext = {
+                userName: '',
+                appointmentType: '',
+                currentStep: 'greeting'
+            };
+            
+            // Toggle chat window
+            chatToggle.addEventListener('click', function() {
+                chatContainer.classList.toggle('active');
+            });
+            
+            closeChat.addEventListener('click', function() {
+                chatContainer.classList.remove('active');
+            });
+            
+            // Open chat from appointment page
+            if (chatAssistantBtn) {
+                chatAssistantBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    chatContainer.classList.add('active');
+                    conversationContext.currentStep = 'appointmentInquiry';
+                    addBotMessage("I'd be happy to help you book an appointment! What type of service are you looking for?");
+                });
+            }
+            
+            // Quick reply buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('quick-reply-btn')) {
+                    const reply = e.target.getAttribute('data-reply');
+                    chatInput.value = reply;
+                    sendChatMessage();
+                }
+            });
+            
+            // Get current time for message timestamps
+            function getCurrentTime() {
+                const now = new Date();
+                return `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            }
+            
+            // Add message to chat
+            function addMessage(content, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user' : 'bot');
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.classList.add('message-time');
+                timeDiv.textContent = getCurrentTime();
+                
+                messageDiv.innerHTML = content;
+                messageDiv.appendChild(timeDiv);
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add bot message with optional quick replies
+            function addBotMessage(content, quickReplies = []) {
+                addMessage(content, false);
+                
+                if (quickReplies.length > 0) {
+                    const quickReplyDiv = document.createElement('div');
+                    quickReplyDiv.classList.add('quick-reply');
+                    
+                    quickReplies.forEach(reply => {
+                        const button = document.createElement('button');
+                        button.classList.add('quick-reply-btn');
+                        button.setAttribute('data-reply', reply);
+                        button.textContent = reply;
+                        quickReplyDiv.appendChild(button);
+                    });
+                    
+                    const lastMessage = chatMessages.lastChild;
+                    lastMessage.appendChild(quickReplyDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+            
+            // Show typing indicator
+            function showTypingIndicator() {
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Hide typing indicator
+            function hideTypingIndicator() {
+                typingIndicator.style.display = 'none';
+            }
+            
+            // Send message function
+            function sendChatMessage() {
+                const message = chatInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message
+                addMessage(message, true);
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Process message and generate response after a short delay
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = processMessage(message);
+                    addBotMessage(response.text, response.quickReplies);
+                }, 1500);
+            }
+            
+            // Send message on button click
+            sendMessage.addEventListener('click', sendChatMessage);
+            
+            // Send message on Enter key
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
+            
+            // Enhanced message processing with conversation flow
+            function processMessage(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Handle conversation flow based on current step
+                switch(conversationContext.currentStep) {
+                    case 'greeting':
+                        if (lowerMessage.includes('appointment') || lowerMessage.includes('book') || lowerMessage.includes('schedule')) {
+                            conversationContext.currentStep = 'appointmentInquiry';
+                            return {
+                                text: "I'd be happy to help you book an appointment! What type of service are you looking for?",
+                                quickReplies: ["General Check-up", "Vaccination", "Health Screening", "Other"]
+                            };
+                        } else if (lowerMessage.includes('service') || lowerMessage.includes('treatment')) {
+                            return {
+                                text: "We offer a range of services including general check-ups, diagnosis and treatment, vaccinations, health counseling, minor procedures, and health screenings. Which service are you interested in learning more about?",
+                                quickReplies: ["General Check-ups", "Vaccinations", "Health Counseling", "Tell me more"]
+                            };
+                        } else if (lowerMessage.includes('hours') || lowerMessage.includes('open')) {
+                            return {
+                                text: "Our clinic hours are Monday-Friday 8:00 AM to 6:00 PM, and Saturday 9:00 AM to 2:00 PM. We're closed on Sundays.",
+                                quickReplies: ["Book an appointment", "Location info", "Contact details"]
+                            };
+                        } else if (lowerMessage.includes('location') || lowerMessage.includes('address')) {
+                            return {
+                                text: "We're located at 123 Medical Center Drive, Healthville, HV 12345. We have ample parking available and the clinic is wheelchair accessible.",
+                                quickReplies: ["Get directions", "Clinic hours", "Contact phone"]
+                            };
+                        } else if (lowerMessage.includes('insurance') || lowerMessage.includes('payment')) {
+                            return {
+                                text: "We accept most major insurance plans. For specific coverage questions, please contact our billing department at (234) 567-8901. We also offer payment plans for self-pay patients.",
+                                quickReplies: ["Book an appointment", "Services offered", "Contact details"]
+                            };
+                        } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                            return {
+                                text: "Hello! How can I assist you today? I can help with appointment booking, service information, or answer general health questions.",
+                                quickReplies: ["Book an appointment", "Services offered", "Clinic hours"]
+                            };
+                        } else if (lowerMessage.includes('thank')) {
+                            return {
+                                text: "You're welcome! Is there anything else I can help you with today?",
+                                quickReplies: ["Book an appointment", "Services info", "No, thank you"]
+                            };
+                        } else {
+                            // Try to provide a health-related response
+                            const healthResponse = getHealthResponse(lowerMessage);
+                            if (healthResponse) {
+                                return healthResponse;
+                            }
+                            
+                            return {
+                                text: "I'm here to help with information about appointments, services, clinic hours, and general health questions. If you have a specific medical concern, it's best to schedule a consultation with Dr. Nicko.",
+                                quickReplies: ["Book an appointment", "Services offered", "Clinic hours"]
+                            };
+                        }
+                    
+                    case 'appointmentInquiry':
+                        conversationContext.appointmentType = message;
+                        conversationContext.currentStep = 'getPatientName';
+                        return {
+                            text: `Great! I can help you schedule a ${message}. To get started, what's your full name?`,
+                            quickReplies: []
+                        };
+                    
+                    case 'getPatientName':
+                        conversationContext.userName = message;
+                        conversationContext.currentStep = 'getContactInfo';
+                        return {
+                            text: `Thanks, ${message}. What's the best phone number to reach you?`,
+                            quickReplies: []
+                        };
+                    
+                    case 'getContactInfo':
+                        conversationContext.currentStep = 'confirmAppointment';
+                        return {
+                            text: `Perfect! I've noted your contact information. For a ${conversationContext.appointmentType}, Dr. Nicko typically has availability on Tuesday and Thursday afternoons. Would you like me to check specific dates, or would you prefer to call us directly at (234) 567-8900 to finalize the appointment?`,
+                            quickReplies: ["Check availability", "Call to schedule", "Maybe later"]
+                        };
+                    
+                    case 'confirmAppointment':
+                        if (lowerMessage.includes('check') || lowerMessage.includes('availability')) {
+                            conversationContext.currentStep = 'greeting';
+                            return {
+                                text: `I've sent an appointment request to our scheduling team for ${conversationContext.userName}. They'll contact you within 24 hours to confirm your ${conversationContext.appointmentType}. Is there anything else I can help you with?`,
+                                quickReplies: ["Services info", "Clinic hours", "No, thank you"]
+                            };
+                        } else if (lowerMessage.includes('call')) {
+                            conversationContext.currentStep = 'greeting';
+                            return {
+                                text: `Understood. Please call us at (234) 567-8900 during business hours, and mention you're interested in a ${conversationContext.appointmentType}. Our staff will be happy to assist you.`,
+                                quickReplies: ["Services info", "Clinic hours", "Location details"]
+                            };
+                        } else {
+                            conversationContext.currentStep = 'greeting';
+                            return {
+                                text: "No problem! Feel free to reach out when you're ready to schedule. Is there anything else I can help with today?",
+                                quickReplies: ["Services info", "Clinic hours", "No, thank you"]
+                            };
+                        }
+                    
+                    default:
+                        conversationContext.currentStep = 'greeting';
+                        return {
+                            text: "How can I assist you today?",
+                            quickReplies: ["Book an appointment", "Services offered", "Clinic hours"]
+                        };
+                }
+            }
+            
+            // Health-related responses
+            function getHealthResponse(message) {
+                if (message.includes('headache')) {
+                    return {
+                        text: "Headaches can have various causes including tension, dehydration, or sinus issues. Try drinking water, resting in a quiet room, and applying a cool compress. If headaches are severe, persistent, or accompanied by other symptoms like vision changes, it's best to see a doctor.",
+                        quickReplies: ["Book an appointment", "Other symptoms", "Prevention tips"]
+                    };
+                } else if (message.includes('fever') || message.includes('temperature')) {
+                    return {
+                        text: "Fever is often a sign your body is fighting infection. Rest, stay hydrated, and consider over-the-counter fever reducers if comfortable. If fever is over 103°F (39.4°C), lasts more than 3 days, or is accompanied by severe symptoms, seek medical attention.",
+                        quickReplies: ["Book an appointment", "When to worry", "Home care tips"]
+                    };
+                } else if (message.includes('cold') || message.includes('flu')) {
+                    return {
+                        text: "Colds and flu are viral infections. Rest, hydration, and over-the-counter symptom relief can help. The flu tends to be more severe with higher fever and body aches. If symptoms are severe or you're in a high-risk group, consider seeing a doctor. Annual flu vaccines are recommended for prevention.",
+                        quickReplies: ["Book an appointment", "Vaccination info", "Prevention tips"]
+                    };
+                } else if (message.includes('blood pressure') || message.includes('hypertension')) {
+                    return {
+                        text: "Normal blood pressure is typically under 120/80 mmHg. Lifestyle changes like reducing salt intake, regular exercise, and maintaining a healthy weight can help manage blood pressure. Regular monitoring is important. If you have concerns about your blood pressure, it's best to consult with a healthcare provider.",
+                        quickReplies: ["Book an appointment", "Healthy lifestyle tips", "Risk factors"]
+                    };
+                } else if (message.includes('vaccine') || message.includes('vaccination')) {
+                    return {
+                        text: "Vaccinations are an important part of preventive healthcare. We offer routine immunizations for children and adults, travel vaccines, and seasonal flu shots. Dr. Nicko can discuss which vaccines are appropriate based on your age, health status, and lifestyle.",
+                        quickReplies: ["Book vaccination", "Vaccine schedule", "Safety information"]
+                    };
+                } else if (message.includes('check') && message.includes('up')) {
+                    return {
+                        text: "Regular check-ups are important for maintaining health and catching potential issues early. Adults should generally have an annual physical exam. During a check-up, Dr. Nicko will review your health history, perform a physical exam, and order any necessary screenings based on your age and risk factors.",
+                        quickReplies: ["Book a check-up", "What to expect", "Preparation tips"]
+                    };
+                } else if (message.includes('stress') || message.includes('anxiety')) {
+                    return {
+                        text: "Managing stress is important for both mental and physical health. Techniques like deep breathing, regular exercise, adequate sleep, and mindfulness can help. If stress is affecting your daily life, consider speaking with a healthcare provider about additional strategies or treatments.",
+                        quickReplies: ["Book an appointment", "Stress management tips", "Mental health resources"]
+                    };
+                } else if (message.includes('diet') || message.includes('nutrition')) {
+                    return {
+                        text: "A balanced diet rich in fruits, vegetables, whole grains, and lean proteins supports overall health. Limiting processed foods, sugar, and saturated fats is recommended. Dr. Nicko can provide personalized nutrition advice based on your health needs and goals.",
+                        quickReplies: ["Nutrition counseling", "Healthy eating tips", "Book an appointment"]
+                    };
+                } else if (message.includes('exercise') || message.includes('fitness')) {
+                    return {
+                        text: "Regular physical activity has numerous health benefits. Adults should aim for at least 150 minutes of moderate-intensity exercise per week. This can include walking, swimming, cycling, or other activities you enjoy. Always consult with a doctor before starting a new exercise program, especially if you have health concerns.",
+                        quickReplies: ["Exercise recommendations", "Health benefits", "Book an appointment"]
+                    };
+                } else if (message.includes('sleep') || message.includes('insomnia')) {
+                    return {
+                        text: "Quality sleep is essential for health. Most adults need 7-9 hours per night. Good sleep habits include maintaining a consistent schedule, creating a restful environment, and avoiding screens before bed. If sleep problems persist, it's worth discussing with a healthcare provider.",
+                        quickReplies: ["Sleep hygiene tips", "When to seek help", "Book an appointment"]
+                    };
+                }
+                
+                return null;
+            }
+            
+            // Form submissions
+            document.getElementById('bookingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your appointment request! We will contact you soon to confirm your booking.');
+                this.reset();
+                document.getElementById('appointment-form').style.display = 'none';
+                document.getElementById('show-form-btn').textContent = 'Book Online';
+            });
+            
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message! We will get back to you soon.');
+                this.reset();
+            });
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 50) {
+                    nav.style.padding = '10px 0';
+                    nav.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                } else {
+                    nav.style.padding = '20px 0';
+                    nav.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                }
+            });
+            
+            // Initialize animations on home page
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(element => {
+                    element.classList.add('appear');
+                });
+            }, 100);
+        });
+    </script>
 </body>
 </html>
