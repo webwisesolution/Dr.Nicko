@@ -997,6 +997,93 @@
             color: white;
         }
 
+        /* Book Online Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .modal h2:after {
+            left: 0;
+            transform: none;
+        }
+
+        .modal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .modal .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: white;
+            color: var(--text);
+        }
+
+        .modal .form-control::placeholder {
+            color: var(--text-light);
+        }
+
+        .modal .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+            outline: none;
+        }
+
         /* Animations */
         @keyframes fadeInLeft {
             from {
@@ -1119,6 +1206,11 @@
             .testimonial-card {
                 min-width: 280px;
             }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1175,7 +1267,7 @@
                 <div class="hero-text">
                     <h1>Your Health, Our Priority</h1>
                     <p>Dr. Nicko – Trusted General Practitioner with over 15 years of experience providing compassionate care for every patient.</p>
-                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
+                    <a href="#" class="btn book-online-btn">Book an Appointment</a>
                     
                     <div class="service-highlights">
                         <div class="highlight">
@@ -1221,7 +1313,7 @@
                         <h2>Meet Doctor Nicko</h2>
                         <p>Dr. Nicko is a board-certified general practitioner with over 15 years of experience in family medicine. He completed his medical degree at Johns Hopkins University and completed his residency at Mayo Clinic.</p>
                         <p>Dr. Nicko believes in building long-term relationships with his patients and providing comprehensive care that addresses both immediate health concerns and long-term wellness goals.</p>
-                        <a href="#" class="btn" data-page="about">Learn More</a>
+                        <a href="#" class="btn book-online-btn">Book an Appointment</a>
                     </div>
                 </div>
             </div>
@@ -1274,7 +1366,7 @@
                         <h3>Treatment Philosophy</h3>
                         <p>"My approach to medicine is simple: treat every patient with the same care and compassion I would want for my own family. I believe in listening carefully, explaining clearly, and partnering with patients to achieve their health goals."</p>
                         
-                        <a href="#" class="btn" data-page="appointment">Book Appointment Now</a>
+                        <a href="#" class="btn book-online-btn">Book Appointment Now</a>
                     </div>
                 </div>
             </div>
@@ -1404,7 +1496,7 @@
                 </div>
                 
                 <div class="text-center" style="margin-top: 40px;">
-                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
+                    <a href="#" class="btn book-online-btn">Book an Appointment</a>
                 </div>
             </div>
         </section>
@@ -1422,7 +1514,7 @@
                         <i class="fas fa-calendar-check"></i>
                         <h3>Online Form</h3>
                         <p>Fill out our simple appointment request form and we'll contact you to confirm.</p>
-                        <a href="#" class="btn btn-secondary" id="show-form-btn">Book Online</a>
+                        <a href="#" class="btn btn-secondary book-online-btn">Book Online</a>
                     </div>
                     <div class="appointment-option fade-in">
                         <i class="fas fa-robot"></i>
@@ -1608,7 +1700,7 @@
                 </div>
                 
                 <div class="text-center" style="margin-top: 40px;">
-                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
+                    <a href="#" class="btn book-online-btn">Book an Appointment</a>
                 </div>
             </div>
         </section>
@@ -1942,10 +2034,56 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 Doctor Nicko. All Rights Reserved.</p>
+                <p>&copy; 2025 Doctor Nicko. All Rights Reserved. | Designed by Alexander N. Kathanzu</p>
             </div>
         </div>
     </footer>
+
+    <!-- Book Online Modal -->
+    <div class="modal" id="bookOnlineModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Book an Appointment</h2>
+            <p>Fill out the form below to request an appointment. We'll contact you to confirm your booking.</p>
+            
+            <form id="modalBookingForm">
+                <div class="form-group">
+                    <label for="modal-name">Full Name</label>
+                    <input type="text" id="modal-name" class="form-control" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-email">Email Address</label>
+                    <input type="email" id="modal-email" class="form-control" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-phone">Phone Number</label>
+                    <input type="tel" id="modal-phone" class="form-control" placeholder="Your Phone">
+                </div>
+                <div class="form-group">
+                    <label for="modal-service">Service Needed</label>
+                    <select id="modal-service" class="form-control" required>
+                        <option value="">Select a service</option>
+                        <option value="checkup">General Check-up</option>
+                        <option value="diagnosis">Diagnosis & Treatment</option>
+                        <option value="vaccination">Vaccination</option>
+                        <option value="counseling">Health Counseling</option>
+                        <option value="procedure">Minor Procedure</option>
+                        <option value="screening">Health Screening</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modal-date">Preferred Date</label>
+                    <input type="date" id="modal-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-message">Additional Information</label>
+                    <textarea id="modal-message" class="form-control" placeholder="Any specific concerns or preferences"></textarea>
+                </div>
+                <button type="submit" class="btn">Submit Request</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Chat Assistant -->
     <div class="chat-toggle" id="chat-toggle">
@@ -2117,7 +2255,7 @@
             });
             
             // Appointment form toggle
-            document.getElementById('show-form-btn').addEventListener('click', function(e) {
+            document.getElementById('show-form-btn')?.addEventListener('click', function(e) {
                 e.preventDefault();
                 const form = document.getElementById('appointment-form');
                 if (form.style.display === 'none') {
@@ -2170,6 +2308,39 @@
                         card.style.display = 'block';
                     });
                 });
+            });
+            
+            // Book Online Modal
+            const bookOnlineModal = document.getElementById('bookOnlineModal');
+            const bookOnlineButtons = document.querySelectorAll('.book-online-btn');
+            const closeModal = document.querySelector('.close-modal');
+            
+            // Open modal when clicking Book Online buttons
+            bookOnlineButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    bookOnlineModal.classList.add('active');
+                });
+            });
+            
+            // Close modal when clicking X
+            closeModal.addEventListener('click', function() {
+                bookOnlineModal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === bookOnlineModal) {
+                    bookOnlineModal.classList.remove('active');
+                }
+            });
+            
+            // Modal form submission
+            document.getElementById('modalBookingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your appointment request! We will contact you soon to confirm your booking.');
+                this.reset();
+                bookOnlineModal.classList.remove('active');
             });
             
             // Enhanced AI Chat Assistant
@@ -2472,7 +2643,7 @@
             }
             
             // Form submissions
-            document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
                 e.preventDefault();
                 alert('Thank you for your appointment request! We will contact you soon to confirm your booking.');
                 this.reset();
