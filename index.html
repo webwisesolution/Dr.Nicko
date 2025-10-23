@@ -1,1641 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Nicko | Your Health, Our Priority</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* CSS Variables for Colors */
-        :root {
-            --primary: #14B8A6;
-            --primary-dark: #0D9488;
-            --secondary: #0F172A;
-            --accent: #E0F7FA;
-            --background: #FFFFFF;
-            --text: #1E293B;
-            --text-light: #64748B;
-            --shadow: rgba(0, 0, 0, 0.1);
-        }
-
-        /* Global Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%2314b8a6' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-
-        /* ... (rest of existing CSS remains the same) ... */
-
-        /* Enhanced Chat Assistant Styles */
-        .chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            height: 500px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            display: none;
-            flex-direction: column;
-            z-index: 1001;
-            overflow: hidden;
-        }
-
-        .chat-container.active {
-            display: flex;
-        }
-
-        .chat-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header h3 {
-            color: white;
-            margin: 0;
-        }
-
-        .close-chat {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border-radius: 18px;
-            line-height: 1.4;
-            position: relative;
-            transform: scale(0.9);
-            opacity: 0;
-            animation: messageAppear 0.3s ease forwards;
-        }
-
-        @keyframes messageAppear {
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .message.user {
-            align-self: flex-end;
-            background-color: var(--primary);
-            color: white;
-            border-bottom-right-radius: 5px;
-        }
-
-        .message.bot {
-            align-self: flex-start;
-            background-color: #f0f0f0;
-            color: var(--text);
-            border-bottom-left-radius: 5px;
-        }
-
-        .message-time {
-            font-size: 0.7rem;
-            margin-top: 5px;
-            opacity: 0.7;
-            text-align: right;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid #eee;
-            position: relative;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-        }
-
-        .chat-input button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            margin-left: 10px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.7);
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        .typing-indicator {
-            display: none;
-            align-self: flex-start;
-            background-color: #f0f0f0;
-            padding: 12px 15px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-            border-bottom-left-radius: 5px;
-        }
-
-        .typing-indicator span {
-            height: 8px;
-            width: 8px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            margin: 0 2px;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-
-        .typing-indicator span:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .quick-reply {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 10px;
-            gap: 8px;
-        }
-
-        .quick-reply-btn {
-            background-color: #f0f0f0;
-            border: none;
-            border-radius: 15px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .quick-reply-btn:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .suggestion-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .suggestion-chip {
-            background-color: #e6f7f5;
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--primary);
-        }
-
-        .suggestion-chip:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .conversation-step {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            margin-top: 5px;
-            font-style: italic;
-        }
-
-        .medical-disclaimer {
-            font-size: 0.7rem;
-            color: var(--text-light);
-            margin-top: 8px;
-            font-style: italic;
-            border-top: 1px solid #eee;
-            padding-top: 8px;
-        }
-
-        .appointment-summary {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: 10px;
-            border-left: 3px solid var(--primary);
-        }
-
-        .appointment-summary h4 {
-            margin-bottom: 8px;
-            color: var(--secondary);
-        }
-
-        .appointment-summary p {
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-        }
-
-        .chat-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .chat-toggle:hover {
-            background-color: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        .chat-toggle i {
-            font-size: 1.5rem;
-        }
-
-        /* Responsive adjustments for chat */
-        @media (max-width: 768px) {
-            .chat-container {
-                width: 100%;
-                height: 100%;
-                bottom: 0;
-                right: 0;
-                border-radius: 0;
-            }
-        }
-
-        /* ... (rest of existing CSS remains the same) ... */
-    </style>
+  <meta charset="UTF-8">
+  <title>Brick Breaker Game</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #scoreboard {
+      color: #fff;
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 10px;
+      font-family: 'Consolas', monospace;
+    }
+    canvas {
+      background: #222;
+      border: 3px solid #fff;
+      border-radius: 8px;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container nav-container">
-            <a href="#" class="logo" data-page="home">
-                <i class="fas fa-stethoscope"></i>
-                Doctor Nicko
-            </a>
-            <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-links">
-                <li><a href="#" data-page="home" class="active">Home</a></li>
-                <li><a href="#" data-page="about">About</a></li>
-                <li><a href="#" data-page="services">Services</a></li>
-                <li><a href="#" data-page="appointment">Appointments</a></li>
-                <li><a href="#" data-page="testimonials">Testimonials</a></li>
-                <li><a href="#" data-page="blog">Blog</a></li>
-                <li><a href="#" data-page="contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+  <div>
+    <div id="scoreboard">Score: 0</div>
+    <canvas id="gameCanvas" width="480" height="320"></canvas>
+  </div>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreboard = document.getElementById('scoreboard');
+    const width = canvas.width;
+    const height = canvas.height;
 
-    <!-- Home Page -->
-    <div id="home" class="page active">
-        <!-- Floating background elements -->
-        <div class="floating-element floating-element-1"></div>
-        <div class="floating-element floating-element-2"></div>
-        <div class="floating-element floating-element-3"></div>
-        
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="container hero-content">
-                <div class="hero-text">
-                    <h1>Your Health, Our Priority</h1>
-                    <p>Dr. Nicko – Trusted General Practitioner with over 15 years of experience providing compassionate care for every patient.</p>
-                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
-                    
-                    <div class="service-highlights">
-                        <div class="highlight">
-                            <div class="highlight-icon">
-                                <i class="fas fa-heartbeat"></i>
-                            </div>
-                            <h4>Check-ups</h4>
-                        </div>
-                        <div class="highlight">
-                            <div class="highlight-icon">
-                                <i class="fas fa-diagnoses"></i>
-                            </div>
-                            <h4>Diagnosis</h4>
-                        </div>
-                        <div class="highlight">
-                            <div class="highlight-icon">
-                                <i class="fas fa-user-md"></i>
-                            </div>
-                            <h4>Consultations</h4>
-                        </div>
-                        <div class="highlight">
-                            <div class="highlight-icon">
-                                <i class="fas fa-syringe"></i>
-                            </div>
-                            <h4>Vaccinations</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <div class="floating-shapes">
-                        <div class="floating-shape shape-1"></div>
-                        <div class="floating-shape shape-2"></div>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Doctor Nicko">
-                </div>
-            </div>
-        </section>
+    // Paddle
+    const paddleHeight = 12;
+    const paddleWidth = 75;
+    let paddleX = (width - paddleWidth) / 2;
+    const paddleSpeed = 7;
 
-        <!-- About Preview Section -->
-        <section class="about-preview">
-            <div class="container">
-                <div class="about-content">
-                    <div class="about-image fade-in">
-                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Doctor Nicko">
-                    </div>
-                    <div class="about-text fade-in">
-                        <h2>Meet Doctor Nicko</h2>
-                        <p>Dr. Nicko is a board-certified general practitioner with over 15 years of experience in family medicine. He completed his medical degree at Johns Hopkins University and completed his residency at Mayo Clinic.</p>
-                        <p>Dr. Nicko believes in building long-term relationships with his patients and providing comprehensive care that addresses both immediate health concerns and long-term wellness goals.</p>
-                        <a href="#" class="btn" data-page="about">Learn More</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+    // Ball
+    let x = width / 2;
+    let y = height - 30;
+    let dx = 2.5;
+    let dy = -2.5;
+    const ballRadius = 8;
 
-        <!-- Trust Section -->
-        <section class="trust">
-            <div class="container">
-                <div class="about-stats">
-                    <div class="stat">
-                        <span class="stat-number">15+</span>
-                        <span class="stat-label">Years Experience</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">5000+</span>
-                        <span class="stat-label">Patients Treated</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">98%</span>
-                        <span class="stat-label">Patient Satisfaction</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+    // Bricks
+    const brickRowCount = 5;
+    const brickColumnCount = 7;
+    const brickWidth = 55;
+    const brickHeight = 18;
+    const brickPadding = 8;
+    const brickOffsetTop = 40;
+    const brickOffsetLeft = 15;
+    let bricks = [];
+    for(let c = 0; c < brickColumnCount; c++) {
+      bricks[c] = [];
+      for(let r = 0; r < brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+      }
+    }
 
-    <!-- About Page -->
-    <div id="about" class="page">
-        <!-- Floating background elements -->
-        <div class="floating-element floating-element-1"></div>
-        <div class="floating-element floating-element-2"></div>
-        
-        <section class="about">
-            <div class="container">
-                <h2>About Doctor Nicko</h2>
-                <div class="about-content">
-                    <div class="about-image fade-in">
-                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Doctor Nicko">
-                    </div>
-                    <div class="about-text fade-in">
-                        <h3>Compassionate Care for Every Patient</h3>
-                        <p>Dr. Nicko is a board-certified general practitioner with over 15 years of experience in family medicine. He completed his medical degree at Johns Hopkins University and completed his residency at Mayo Clinic.</p>
-                        <p>Dr. Nicko believes in building long-term relationships with his patients and providing comprehensive care that addresses both immediate health concerns and long-term wellness goals.</p>
-                        
-                        <h3>Education & Certifications</h3>
-                        <div class="qualifications">
-                            <div class="qualification-item">Doctor of Medicine (M.D.) - Johns Hopkins University</div>
-                            <div class="qualification-item">Board Certified in Family Medicine</div>
-                            <div class="qualification-item">Advanced Cardiac Life Support (ACLS) Certified</div>
-                            <div class="qualification-item">Pediatric Advanced Life Support (PALS) Certified</div>
-                            <div class="qualification-item">Member, American Academy of Family Physicians</div>
-                        </div>
-                        
-                        <h3>Treatment Philosophy</h3>
-                        <p>"My approach to medicine is simple: treat every patient with the same care and compassion I would want for my own family. I believe in listening carefully, explaining clearly, and partnering with patients to achieve their health goals."</p>
-                        
-                        <a href="#" class="btn" data-page="appointment">Book Appointment Now</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+    // Controls
+    let rightPressed = false;
+    let leftPressed = false;
 
-    <!-- Services Page -->
-    <div id="services" class="page">
-        <!-- Floating background elements -->
-        <div class="floating-element floating-element-1"></div>
-        <div class="floating-element floating-element-3"></div>
-        
-        <section class="services">
-            <div class="container">
-                <h2>Our Services</h2>
-                <p class="text-center">Comprehensive medical care for the entire family. From routine check-ups to specialized treatments, we're here to support your health journey.</p>
-                
-                <div class="services-grid">
-                    <div class="card service-card fade-in">
-                        <div class="service-icon">
-                            <i class="fas fa-heartbeat"></i>
-                        </div>
-                        <h3>General Check-Ups</h3>
-                        <p>Comprehensive health examinations to monitor your well-being and detect potential issues early.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="checkups">Learn More</button>
-                        <div class="service-detail" id="checkups-detail">
-                            <p>Our general check-ups include:</p>
-                            <ul>
-                                <li>Complete physical examination</li>
-                                <li>Blood pressure and vital signs check</li>
-                                <li>Blood tests for cholesterol, glucose, and more</li>
-                                <li>Health risk assessment</li>
-                                <li>Personalized health recommendations</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card service-card fade-in">
-                        <div class="service-icon">
-                            <i class="fas fa-diagnoses"></i>
-                        </div>
-                        <h3>Diagnosis & Treatment</h3>
-                        <p>Expert evaluation and treatment of common conditions with personalized care plans.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="diagnosis">Learn More</button>
-                        <div class="service-detail" id="diagnosis-detail">
-                            <p>We diagnose and treat a wide range of conditions including:</p>
-                            <ul>
-                                <li>Respiratory infections (cold, flu, bronchitis)</li>
-                                <li>Chronic conditions (hypertension, diabetes, asthma)</li>
-                                <li>Skin conditions and rashes</li>
-                                <li>Digestive issues</li>
-                                <li>Musculoskeletal pain and injuries</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card service-card fade-in">
-                        <div class="service-icon">
-                            <i class="fas fa-syringe"></i>
-                        </div>
-                        <h3>Vaccinations</h3>
-                        <p>Immunizations for adults and children to protect against preventable diseases.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="vaccinations">Learn More</button>
-                        <div class="service-detail" id="vaccinations-detail">
-                            <p>We offer a comprehensive range of vaccinations:</p>
-                            <ul>
-                                <li>Childhood immunization schedule</li>
-                                <li>Flu vaccines (seasonal)</li>
-                                <li>Travel vaccinations</li>
-                                <li>HPV vaccine</li>
-                                <li>Pneumonia and shingles vaccines</li>
-                                <li>COVID-19 vaccines and boosters</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card service-card fade-in">
-                        <div class="service-icon">
-                            <i class="fas fa-user-md"></i>
-                        </div>
-                        <h3>Health Counseling</h3>
-                        <p>Lifestyle guidance and preventive care strategies tailored to your health needs.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="counseling">Learn More</button>
-                        <div class="service-detail" id="counseling-detail">
-                            <p>Our health counseling services include:</p>
-                            <ul>
-                                <li>Nutrition and weight management</li>
-                                <li>Exercise and fitness planning</li>
-                                <li>Stress management techniques</li>
-                                <li>Smoking cessation support</li>
-                                <li>Chronic disease management education</li>
-                                <li>Mental health and wellness support</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card service-card fade-in">
-                        <div class="service-icon">
-                            <i class="fas fa-procedures"></i>
-                        </div>
-                        <h3>Minor Procedures</h3>
-                        <p>In-office minor surgical procedures for convenience and quick recovery.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="procedures">Learn More</button>
-                        <div class="service-detail" id="procedures-detail">
-                            <p>We perform various minor procedures including:</p>
-                            <ul>
-                                <li>Skin lesion removal</li>
-                                <li>Wart treatment and removal</li>
-                                <li>Joint injections</li>
-                                <li>Minor laceration repair</li>
-                                <li>Ingrown toenail treatment</li>
-                                <li>Abscess drainage</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card service-card fade-in">
-                        <div class="service-icon">
-                            <i class="fas fa-file-medical"></i>
-                        </div>
-                        <h3>Health Screenings</h3>
-                        <p>Comprehensive screening tests to detect health issues before symptoms appear.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="screenings">Learn More</button>
-                        <div class="service-detail" id="screenings-detail">
-                            <p>We offer various health screenings:</p>
-                            <ul>
-                                <li>Cardiovascular risk assessment</li>
-                                <li>Cancer screenings (skin, colon, prostate, breast)</li>
-                                <li>Bone density testing</li>
-                                <li>Vision and hearing tests</li>
-                                <li>Diabetes screening</li>
-                                <li>Thyroid function tests</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="text-center" style="margin-top: 40px;">
-                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
-                </div>
-            </div>
-        </section>
-    </div>
+    document.addEventListener("keydown", keyDownHandler);
+    document.addEventListener("keyup", keyUpHandler);
+    canvas.addEventListener("mousemove", mouseMoveHandler);
 
-    <!-- Appointment Page -->
-    <div id="appointment" class="page">
-        <section class="appointment">
-            <div class="container">
-                <h2>Book an Appointment</h2>
-                <p>Choose the most convenient way to schedule your visit with Dr. Nicko. We offer flexible booking options to fit your busy lifestyle.</p>
-                
-                <div class="appointment-options">
-                    <div class="appointment-option fade-in">
-                        <i class="fas fa-calendar-check"></i>
-                        <h3>Online Form</h3>
-                        <p>Fill out our simple appointment request form and we'll contact you to confirm.</p>
-                        <a href="#" class="btn btn-secondary" id="show-form-btn">Book Online</a>
-                    </div>
-                    <div class="appointment-option fade-in">
-                        <i class="fas fa-robot"></i>
-                        <h3>AI Assistant</h3>
-                        <p>Chat with our AI assistant for quick appointment scheduling and health questions.</p>
-                        <a href="#" class="btn btn-secondary" id="chat-assistant-btn">Message Now</a>
-                    </div>
-                    <div class="appointment-option fade-in">
-                        <i class="fas fa-phone"></i>
-                        <h3>Phone Call</h3>
-                        <p>Call our clinic directly during business hours to book your appointment.</p>
-                        <a href="tel:+1234567890" class="btn btn-secondary">Call Now</a>
-                    </div>
-                </div>
-                
-                <div class="appointment-form" id="appointment-form" style="display: none;">
-                    <h3>Appointment Request Form</h3>
-                    <form id="bookingForm">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" class="form-control" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" class="form-control" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" class="form-control" placeholder="Your Phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Service Needed</label>
-                            <select id="service" class="form-control" required>
-                                <option value="">Select a service</option>
-                                <option value="checkup">General Check-up</option>
-                                <option value="diagnosis">Diagnosis & Treatment</option>
-                                <option value="vaccination">Vaccination</option>
-                                <option value="counseling">Health Counseling</option>
-                                <option value="procedure">Minor Procedure</option>
-                                <option value="screening">Health Screening</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Preferred Date</label>
-                            <input type="date" id="date" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Additional Information</label>
-                            <textarea id="message" class="form-control" placeholder="Any specific concerns or preferences"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-secondary">Submit Request</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </div>
+    function keyDownHandler(e) {
+      if(e.key === "Right" || e.key === "ArrowRight") rightPressed = true;
+      else if(e.key === "Left" || e.key === "ArrowLeft") leftPressed = true;
+    }
+    function keyUpHandler(e) {
+      if(e.key === "Right" || e.key === "ArrowRight") rightPressed = false;
+      else if(e.key === "Left" || e.key === "ArrowLeft") leftPressed = false;
+    }
+    function mouseMoveHandler(e) {
+      const rect = canvas.getBoundingClientRect();
+      let relX = e.clientX - rect.left;
+      if(relX > 0 && relX < width) {
+        paddleX = Math.min(width - paddleWidth, Math.max(0, relX - paddleWidth/2));
+      }
+    }
 
-    <!-- Testimonials Page -->
-    <div id="testimonials" class="page">
-        <!-- Floating background elements -->
-        <div class="floating-element floating-element-2"></div>
-        
-        <section class="testimonials">
-            <div class="container">
-                <h2>Patient Testimonials</h2>
-                <p class="text-center">Hear what our patients have to say about their experience with Dr. Nicko and our practice.</p>
-                
-                <div class="testimonials-container">
-                    <div class="testimonial-slider" id="testimonial-slider">
-                        <!-- Testimonial 1 -->
-                        <div class="testimonial-card fade-in active-testimonial">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"Dr. Nicko really takes time to listen. I felt cared for and understood during my entire treatment. His approach is both professional and compassionate."</p>
-                            <p class="testimonial-author">- Sarah Johnson</p>
-                        </div>
-                        
-                        <!-- Testimonial 2 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"I've been a patient of Dr. Nicko for over 10 years. He remembers details about my health history and always provides thoughtful, personalized care."</p>
-                            <p class="testimonial-author">- Michael Thompson</p>
-                        </div>
-                        
-                        <!-- Testimonial 3 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <p class="testimonial-text">"The entire staff is friendly and efficient. Wait times are minimal, and Dr. Nicko explains everything in terms I can understand. Highly recommended!"</p>
-                            <p class="testimonial-author">- Jennifer Lee</p>
-                        </div>
-                        
-                        <!-- Testimonial 4 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"After struggling with chronic migraines for years, Dr. Nicko found the root cause and developed a treatment plan that actually works. I finally have my life back!"</p>
-                            <p class="testimonial-author">- David Rodriguez</p>
-                        </div>
-                        
-                        <!-- Testimonial 5 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"Dr. Nicko treated my whole family for years. He's knowledgeable, patient, and genuinely cares about our wellbeing. We wouldn't trust anyone else with our health."</p>
-                            <p class="testimonial-author">- Maria Garcia</p>
-                        </div>
-                        
-                        <!-- Testimonial 6 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"I was nervous about my first physical in years, but Dr. Nicko made me feel completely at ease. He explained everything clearly and didn't rush through the appointment."</p>
-                            <p class="testimonial-author">- James Wilson</p>
-                        </div>
-                        
-                        <!-- Testimonial 7 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <p class="testimonial-text">"Dr. Nicko helped me manage my diabetes better than any other doctor I've seen. His practical advice and ongoing support have made a real difference in my health."</p>
-                            <p class="testimonial-author">- Patricia Brown</p>
-                        </div>
-                        
-                        <!-- Testimonial 8 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"As a senior patient, I appreciate how Dr. Nicko takes the time to address all my concerns without making me feel rushed. He's truly one of a kind."</p>
-                            <p class="testimonial-author">- Robert Davis</p>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-nav">
-                        <div class="testimonial-dot active" data-testimonial="0"></div>
-                        <div class="testimonial-dot" data-testimonial="1"></div>
-                        <div class="testimonial-dot" data-testimonial="2"></div>
-                        <div class="testimonial-dot" data-testimonial="3"></div>
-                        <div class="testimonial-dot" data-testimonial="4"></div>
-                        <div class="testimonial-dot" data-testimonial="5"></div>
-                        <div class="testimonial-dot" data-testimonial="6"></div>
-                        <div class="testimonial-dot" data-testimonial="7"></div>
-                    </div>
-                </div>
-                
-                <div class="text-center" style="margin-top: 40px;">
-                    <a href="#" class="btn" data-page="appointment">Book an Appointment</a>
-                </div>
-            </div>
-        </section>
-    </div>
+    let score = 0;
 
-    <!-- Blog Page -->
-    <div id="blog" class="page">
-        <!-- Floating background elements -->
-        <div class="floating-element floating-element-1"></div>
-        <div class="floating-element floating-element-3"></div>
-        
-        <section class="blog">
-            <div class="container">
-                <h2>Health & Wellness Blog</h2>
-                <p class="text-center">Stay informed with the latest health tips, medical insights, and wellness advice from Dr. Nicko.</p>
-                
-                <div class="blog-grid">
-                    <!-- Blog Post 1 -->
-                    <div class="card blog-card fade-in">
-                        <div class="blog-image">
-                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Healthy Heart">
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <span class="blog-date">May 15, 2025</span>
-                                <span class="blog-category">Cardiology</span>
-                            </div>
-                            <h3>5 Simple Ways to Keep Your Heart Healthy</h3>
-                            <p class="blog-excerpt">Heart disease remains the leading cause of death worldwide, but many risk factors are preventable. Discover five evidence-based strategies to maintain optimal heart health and reduce your risk of cardiovascular disease.</p>
-                            <a href="#" class="btn btn-outline read-more-btn" data-blog="1">Read More</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Blog Post 2 -->
-                    <div class="card blog-card fade-in">
-                        <div class="blog-image">
-                            <img src="https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Immune System">
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <span class="blog-date">April 28, 2025</span>
-                                <span class="blog-category">Immunology</span>
-                            </div>
-                            <h3>Boosting Your Immune System Naturally</h3>
-                            <p class="blog-excerpt">Your immune system is your body's defense against infections and diseases. Learn about scientifically-backed ways to strengthen your immune response through nutrition, lifestyle changes, and proper sleep habits.</p>
-                            <a href="#" class="btn btn-outline read-more-btn" data-blog="2">Read More</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Blog Post 3 -->
-                    <div class="card blog-card fade-in">
-                        <div class="blog-image">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Mental Health">
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <span class="blog-date">April 10, 2025</span>
-                                <span class="blog-category">Mental Health</span>
-                            </div>
-                            <h3>The Mind-Body Connection: Managing Stress Effectively</h3>
-                            <p class="blog-excerpt">Chronic stress can have profound effects on both mental and physical health. Explore practical techniques for stress management and understand how mental wellbeing directly impacts your physical health.</p>
-                            <a href="#" class="btn btn-outline read-more-btn" data-blog="3">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Full Blog Articles (hidden by default) -->
-                <div class="blog-full" id="blog-1">
-                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-                    <div class="blog-header">
-                        <div class="blog-meta">
-                            <span class="blog-date">May 15, 2025</span>
-                            <span class="blog-category">Cardiology</span>
-                        </div>
-                        <h2>5 Simple Ways to Keep Your Heart Healthy</h2>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Healthy Heart" class="blog-featured-image">
-                    <div class="blog-content-full">
-                        <p>Heart disease remains the leading cause of death worldwide, but the good news is that many risk factors are preventable. By making simple lifestyle changes, you can significantly reduce your risk of developing cardiovascular problems. Here are five evidence-based strategies to maintain optimal heart health.</p>
-                        
-                        <h3>1. Adopt a Heart-Healthy Diet</h3>
-                        <p>A balanced diet rich in fruits, vegetables, whole grains, and lean proteins can work wonders for your cardiovascular system. Focus on incorporating foods high in fiber and antioxidants while limiting saturated fats, trans fats, and sodium. The Mediterranean diet, in particular, has been extensively studied and shown to reduce heart disease risk by up to 30%.</p>
-                        
-                        <h3>2. Stay Physically Active</h3>
-                        <p>Regular exercise strengthens your heart muscle, improves circulation, and helps maintain a healthy weight. Aim for at least 150 minutes of moderate-intensity aerobic activity or 75 minutes of vigorous activity each week. Even simple activities like brisk walking, cycling, or swimming can make a significant difference in your heart health.</p>
-                        
-                        <h3>3. Maintain a Healthy Weight</h3>
-                        <p>Excess weight, particularly around the abdomen, puts additional strain on your heart and increases your risk of high blood pressure, high cholesterol, and type 2 diabetes. Even a modest weight loss of 5-10% of your body weight can improve blood pressure, cholesterol levels, and reduce inflammation.</p>
-                        
-                        <h3>4. Don't Smoke and Limit Alcohol</h3>
-                        <p>Smoking is one of the most significant risk factors for heart disease. Chemicals in tobacco can damage your heart and blood vessels, leading to narrowed arteries (atherosclerosis). If you smoke, quitting is the single best thing you can do for your heart. Additionally, limit alcohol consumption to moderate levels – no more than one drink per day for women and two for men.</p>
-                        
-                        <h3>5. Manage Stress and Get Quality Sleep</h3>
-                        <p>Chronic stress and poor sleep can contribute to high blood pressure and other heart disease risk factors. Practice stress-reduction techniques such as meditation, deep breathing, or yoga. Aim for 7-9 hours of quality sleep per night, as sleep allows your heart to rest and repair.</p>
-                        
-                        <p>Remember, small changes can lead to significant improvements in your heart health over time. Consult with your healthcare provider before making major lifestyle changes, especially if you have existing health conditions.</p>
-                    </div>
-                </div>
-                
-                <div class="blog-full" id="blog-2">
-                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-                    <div class="blog-header">
-                        <div class="blog-meta">
-                            <span class="blog-date">April 28, 2025</span>
-                            <span class="blog-category">Immunology</span>
-                        </div>
-                        <h2>Boosting Your Immune System Naturally</h2>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Immune System" class="blog-featured-image">
-                    <div class="blog-content-full">
-                        <p>Your immune system is a complex network of cells, tissues, and organs that work together to defend your body against harmful pathogens. While no magic pill can "boost" your immunity overnight, several lifestyle factors can help optimize your immune function. Here's what the science says about naturally supporting your body's defense system.</p>
-                        
-                        <h3>Nutrition for Immunity</h3>
-                        <p>A well-balanced diet provides the essential nutrients your immune system needs to function properly. Key nutrients include:</p>
-                        <ul>
-                            <li><strong>Vitamin C:</strong> Found in citrus fruits, bell peppers, and broccoli, it supports various cellular functions of both innate and adaptive immune systems.</li>
-                            <li><strong>Vitamin D:</strong> Crucial for immune function; consider supplements if you have limited sun exposure.</li>
-                            <li><strong>Zinc:</strong> Found in lean meats, seafood, and legumes, it helps immune cells develop and communicate.</li>
-                            <li><strong>Probiotics:</strong> Fermented foods like yogurt and kimchi support gut health, where about 70% of your immune system resides.</li>
-                        </ul>
-                        
-                        <h3>The Importance of Sleep</h3>
-                        <p>During sleep, your body produces and distributes key immune cells like cytokines, T cells, and interleukin 12. Chronic sleep deprivation can make you more susceptible to illnesses. Adults should aim for 7-9 hours of quality sleep per night to support optimal immune function.</p>
-                        
-                        <h3>Exercise Moderately</h3>
-                        <p>Regular, moderate exercise can reduce inflammation and help immune cells regenerate regularly. However, intense, prolonged exercise without adequate recovery can temporarily suppress immune function. Aim for a balanced approach with both cardio and strength training.</p>
-                        
-                        <h3>Stress Management</h3>
-                        <p>Chronic stress suppresses the immune response by releasing the hormone cortisol. Incorporate stress-reduction practices such as meditation, deep breathing exercises, or mindfulness into your daily routine to keep your immune system functioning at its best.</p>
-                        
-                        <h3>Other Lifestyle Factors</h3>
-                        <p>Additional ways to support your immune system include:</p>
-                        <ul>
-                            <li>Maintaining a healthy weight</li>
-                            <li>Avoiding smoking and limiting alcohol consumption</li>
-                            <li>Practicing good hygiene to prevent infections</li>
-                            <li>Staying up to date with recommended vaccinations</li>
-                        </ul>
-                        
-                        <p>Remember that a holistic approach works best when it comes to immune health. No single supplement or food can magically boost your immunity, but consistent healthy habits can significantly support your body's natural defenses.</p>
-                    </div>
-                </div>
-                
-                <div class="blog-full" id="blog-3">
-                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-                    <div class="blog-header">
-                        <div class="blog-meta">
-                            <span class="blog-date">April 10, 2025</span>
-                            <span class="blog-category">Mental Health</span>
-                        </div>
-                        <h2>The Mind-Body Connection: Managing Stress Effectively</h2>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mental Health" class="blog-featured-image">
-                    <div class="blog-content-full">
-                        <p>The connection between our mental and physical health is more profound than we often realize. Chronic stress doesn't just affect your mood—it can have tangible effects on your body, contributing to everything from digestive issues to cardiovascular problems. Understanding this mind-body connection is the first step toward managing stress effectively.</p>
-                        
-                        <h3>How Stress Affects Your Body</h3>
-                        <p>When you experience stress, your body releases hormones like cortisol and adrenaline. These hormones prepare your body for a "fight or flight" response. While this is helpful in short-term dangerous situations, chronic activation of this response can lead to:</p>
-                        <ul>
-                            <li>Elevated blood pressure and heart rate</li>
-                            <li>Weakened immune system</li>
-                            <li>Digestive problems</li>
-                            <li>Muscle tension and pain</li>
-                            <li>Sleep disturbances</li>
-                            <li>Weight changes</li>
-                        </ul>
-                        
-                        <h3>Effective Stress Management Techniques</h3>
-                        <p>Fortunately, there are many evidence-based approaches to managing stress:</p>
-                        
-                        <h4>Mindfulness and Meditation</h4>
-                        <p>Regular mindfulness practice can change how your brain responds to stress. Even just 10 minutes of daily meditation can help reduce anxiety and improve emotional regulation. Apps like Headspace or Calm can guide beginners through the process.</p>
-                        
-                        <h4>Physical Activity</h4>
-                        <p>Exercise is a powerful stress reliever. It increases endorphins (your brain's "feel-good" neurotransmitters) and can serve as a meditation in motion. Find an activity you enjoy, whether it's yoga, running, dancing, or simply walking in nature.</p>
-                        
-                        <h4>Social Connection</h4>
-                        <p>Strong social ties can act as a buffer against stress. Make time for meaningful connections with friends and family, and don't hesitate to seek support when you need it.</p>
-                        
-                        <h4>Time Management</h4>
-                        <p>Feeling overwhelmed by responsibilities can significantly contribute to stress. Learning to prioritize tasks, set boundaries, and say "no" when necessary can help create a more manageable schedule.</p>
-                        
-                        <h4>Professional Support</h4>
-                        <p>If stress feels unmanageable, consider speaking with a mental health professional. Therapy can provide valuable tools for coping with stress and addressing underlying issues.</p>
-                        
-                        <h3>Creating a Stress-Resilient Lifestyle</h3>
-                        <p>Beyond specific techniques, building a lifestyle that naturally buffers against stress is key. This includes:</p>
-                        <ul>
-                            <li>Maintaining a consistent sleep schedule</li>
-                            <li>Eating a balanced diet</li>
-                            <li>Limiting caffeine and alcohol</li>
-                            <li>Making time for hobbies and relaxation</li>
-                            <li>Practicing gratitude</li>
-                        </ul>
-                        
-                        <p>Remember that some stress is a normal part of life, and complete elimination isn't the goal. Instead, focus on developing healthy coping mechanisms and creating a lifestyle that supports both mental and physical wellbeing.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Contact Page -->
-    <div id="contact" class="page">
-        <!-- Floating background elements -->
-        <div class="floating-element floating-element-2"></div>
-        
-        <section class="contact">
-            <div class="container">
-                <h2>Contact Us</h2>
-                <p class="text-center">Get in touch with us for any questions or to schedule your appointment. We're here to help!</p>
-                
-                <div class="contact-content">
-                    <div class="contact-info fade-in">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div>
-                                <h3>Our Location</h3>
-                                <p>123 Medical Center Drive<br>Healthville, HV 12345</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div>
-                                <h3>Phone Number</h3>
-                                <p>+1 (234) 567-8900</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div>
-                                <h3>Email Address</h3>
-                                <p>info@doctornicko.com</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div>
-                                <h3>Working Hours</h3>
-                                <p>Monday - Friday: 8:00 AM - 6:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
-                            </div>
-                        </div>
-                        
-                        <div class="social-links">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    <div class="contact-form fade-in">
-                        <h3>Send Us a Message</h3>
-                        <form id="contactForm">
-                            <div class="form-group">
-                                <label for="contact-name">Full Name</label>
-                                <input type="text" id="contact-name" class="form-control" placeholder="Your Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-email">Email Address</label>
-                                <input type="email" id="contact-email" class="form-control" placeholder="Your Email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-subject">Subject</label>
-                                <input type="text" id="contact-subject" class="form-control" placeholder="Message Subject" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-message">Message</label>
-                                <textarea id="contact-message" class="form-control" placeholder="Your Message" required></textarea>
-                            </div>
-                            <button type="submit" class="btn">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-                
-                <div class="map-container">
-                    <div style="padding: 20px; text-align: center;">
-                        <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
-                        <h3>Our Clinic Location</h3>
-                        <p>123 Medical Center Drive, Healthville, HV 12345</p>
-                        <a href="#" class="btn" style="margin-top: 15px;">Get Directions</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-about">
-                    <a href="#" class="footer-logo" data-page="home">Doctor Nicko</a>
-                    <p>Providing compassionate and comprehensive healthcare for over 15 years. Your health is our priority.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-links">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#" data-page="home">Home</a></li>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="services">Services</a></li>
-                        <li><a href="#" data-page="appointment">Appointments</a></li>
-                        <li><a href="#" data-page="testimonials">Testimonials</a></li>
-                        <li><a href="#" data-page="blog">Blog</a></li>
-                        <li><a href="#" data-page="contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h3>Our Services</h3>
-                    <ul>
-                        <li><a href="#" data-page="services">General Check-Ups</a></li>
-                        <li><a href="#" data-page="services">Diagnosis & Treatment</a></li>
-                        <li><a href="#" data-page="services">Vaccinations</a></li>
-                        <li><a href="#" data-page="services">Health Counseling</a></li>
-                        <li><a href="#" data-page="services">Minor Procedures</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h3>Contact Info</h3>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> 123 Medical Center Drive</li>
-                        <li><i class="fas fa-phone"></i> +1 (234) 567-8900</li>
-                        <li><i class="fas fa-envelope"></i> info@doctornicko.com</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 Doctor Nicko. All Rights Reserved. | Designed by Alexander N. Kathanzu</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Chat Assistant -->
-   <div class="chat-toggle" id="chat-toggle">
-        <i class="fas fa-robot"></i>
-    </div>
-    
-    <div class="chat-container" id="chat-container">
-        <div class="chat-header">
-            <h3>Dr. Nicko AI Assistant</h3>
-            <button class="close-chat" id="close-chat">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="message bot">
-                Hello! I'm Dr. Nicko's AI assistant. How can I help you today? I can assist with appointment booking, service information, or general health questions.
-                <div class="message-time">Just now</div>
-                <div class="suggestion-chips">
-                    <div class="suggestion-chip" data-suggestion="Book an appointment">Book an appointment</div>
-                    <div class="suggestion-chip" data-suggestion="What services do you offer?">Services offered</div>
-                    <div class="suggestion-chip" data-suggestion="What are your hours?">Clinic hours</div>
-                    <div class="suggestion-chip" data-suggestion="I have a health question">Health questions</div>
-                </div>
-            </div>
-        </div>
-        <div class="typing-indicator" id="typing-indicator">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="chat-input" placeholder="Type your message here...">
-            <button id="send-message">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // Page Navigation and other existing JavaScript remains the same
-
-        // Enhanced AI Chat Assistant
-        const chatToggle = document.getElementById('chat-toggle');
-        const chatContainer = document.getElementById('chat-container');
-        const closeChat = document.getElementById('close-chat');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatInput = document.getElementById('chat-input');
-        const sendMessage = document.getElementById('send-message');
-        const typingIndicator = document.getElementById('typing-indicator');
-        const chatAssistantBtn = document.getElementById('chat-assistant-btn');
-
-        // Enhanced conversation context
-        let conversationContext = {
-            userName: '',
-            userContact: '',
-            appointmentType: '',
-            appointmentDate: '',
-            symptoms: '',
-            currentStep: 'greeting',
-            conversationHistory: []
-        };
-
-        // Toggle chat window
-        chatToggle.addEventListener('click', function() {
-            chatContainer.classList.toggle('active');
-        });
-
-        closeChat.addEventListener('click', function() {
-            chatContainer.classList.remove('active');
-        });
-
-        // Open chat from appointment page
-        if (chatAssistantBtn) {
-            chatAssistantBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                chatContainer.classList.add('active');
-                conversationContext.currentStep = 'appointmentInquiry';
-                addBotMessage("I'd be happy to help you book an appointment! What type of service are you looking for?");
-            });
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+      ctx.fillStyle = "#0ff";
+      ctx.fill();
+      ctx.closePath();
+    }
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddleX, height - paddleHeight, paddleWidth, paddleHeight);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+      ctx.closePath();
+    }
+    function drawBricks() {
+      for(let c = 0; c < brickColumnCount; c++) {
+        for(let r = 0; r < brickRowCount; r++) {
+          if(bricks[c][r].status === 1) {
+            let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+            let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+            bricks[c][r].x = brickX;
+            bricks[c][r].y = brickY;
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            ctx.fillStyle = `hsl(${50 + r*30}, 80%, 60%)`;
+            ctx.fill();
+            ctx.closePath();
+          }
         }
-
-        // Suggestion chips
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('suggestion-chip')) {
-                const suggestion = e.target.getAttribute('data-suggestion');
-                chatInput.value = suggestion;
-                sendChatMessage();
+      }
+    }
+    function collisionDetection() {
+      for(let c = 0; c < brickColumnCount; c++) {
+        for(let r = 0; r < brickRowCount; r++) {
+          let b = bricks[c][r];
+          if(b.status === 1) {
+            if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+              dy = -dy;
+              b.status = 0;
+              score++;
+              scoreboard.textContent = "Score: " + score;
+              if(score === brickRowCount * brickColumnCount) {
+                alert("You WIN! Congratulations!");
+                document.location.reload();
+              }
             }
-        });
-
-        // Quick reply buttons
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('quick-reply-btn')) {
-                const reply = e.target.getAttribute('data-reply');
-                chatInput.value = reply;
-                sendChatMessage();
-            }
-        });
-
-        // Get current time for message timestamps
-        function getCurrentTime() {
-            const now = new Date();
-            return `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+          }
         }
+      }
+    }
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      drawBricks();
+      drawBall();
+      drawPaddle();
+      collisionDetection();
 
-        // Add message to chat with animation
-        function addMessage(content, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(isUser ? 'user' : 'bot');
-            
-            const timeDiv = document.createElement('div');
-            timeDiv.classList.add('message-time');
-            timeDiv.textContent = getCurrentTime();
-            
-            messageDiv.innerHTML = content;
-            messageDiv.appendChild(timeDiv);
-            
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Add to conversation history
-            conversationContext.conversationHistory.push({
-                content: content,
-                isUser: isUser,
-                timestamp: new Date()
-            });
+      // Ball movement
+      if(x + dx > width - ballRadius || x + dx < ballRadius) dx = -dx;
+      if(y + dy < ballRadius) dy = -dy;
+      else if(y + dy > height - ballRadius - paddleHeight) {
+        if(x > paddleX && x < paddleX + paddleWidth) {
+          dy = -dy;
+          // add some "spin" based on where it hits the paddle
+          let hitPoint = (x - (paddleX + paddleWidth/2)) / (paddleWidth/2);
+          dx += hitPoint * 1.2;
+        } else if(y + dy > height - ballRadius) {
+          alert("GAME OVER");
+          document.location.reload();
         }
+      }
 
-        // Add bot message with optional quick replies and suggestions
-        function addBotMessage(content, quickReplies = [], suggestions = [], stepInfo = '') {
-            addMessage(content, false);
-            
-            const lastMessage = chatMessages.lastChild;
-            
-            // Add step information if provided
-            if (stepInfo) {
-                const stepDiv = document.createElement('div');
-                stepDiv.classList.add('conversation-step');
-                stepDiv.textContent = stepInfo;
-                lastMessage.appendChild(stepDiv);
-            }
-            
-            // Add quick replies if provided
-            if (quickReplies.length > 0) {
-                const quickReplyDiv = document.createElement('div');
-                quickReplyDiv.classList.add('quick-reply');
-                
-                quickReplies.forEach(reply => {
-                    const button = document.createElement('button');
-                    button.classList.add('quick-reply-btn');
-                    button.setAttribute('data-reply', reply);
-                    button.textContent = reply;
-                    quickReplyDiv.appendChild(button);
-                });
-                
-                lastMessage.appendChild(quickReplyDiv);
-            }
-            
-            // Add suggestion chips if provided
-            if (suggestions.length > 0) {
-                const suggestionDiv = document.createElement('div');
-                suggestionDiv.classList.add('suggestion-chips');
-                
-                suggestions.forEach(suggestion => {
-                    const chip = document.createElement('div');
-                    chip.classList.add('suggestion-chip');
-                    chip.setAttribute('data-suggestion', suggestion);
-                    chip.textContent = suggestion;
-                    suggestionDiv.appendChild(chip);
-                });
-                
-                lastMessage.appendChild(suggestionDiv);
-            }
-            
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+      x += dx;
+      y += dy;
 
-        // Show typing indicator
-        function showTypingIndicator() {
-            typingIndicator.style.display = 'block';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+      // Paddle movement
+      if(rightPressed && paddleX < width - paddleWidth) paddleX += paddleSpeed;
+      else if(leftPressed && paddleX > 0) paddleX -= paddleSpeed;
 
-        // Hide typing indicator
-        function hideTypingIndicator() {
-            typingIndicator.style.display = 'none';
-        }
+      requestAnimationFrame(draw);
+    }
 
-        // Create ripple effect
-        function createRipple(event) {
-            const button = event.currentTarget;
-            const circle = document.createElement('span');
-            const diameter = Math.max(button.clientWidth, button.clientHeight);
-            const radius = diameter / 2;
-            
-            circle.style.width = circle.style.height = `${diameter}px`;
-            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
-            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
-            circle.classList.add('ripple');
-            
-            const ripple = button.getElementsByClassName('ripple')[0];
-            if (ripple) {
-                ripple.remove();
-            }
-            
-            button.appendChild(circle);
-        }
-
-        // Send message function
-        function sendChatMessage() {
-            const message = chatInput.value.trim();
-            if (message === '') return;
-            
-            // Add user message
-            addMessage(message, true);
-            
-            // Clear input
-            chatInput.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            // Process message and generate response after a short delay
-            setTimeout(() => {
-                hideTypingIndicator();
-                const response = processMessage(message);
-                addBotMessage(response.text, response.quickReplies, response.suggestions, response.stepInfo);
-                
-                // Add medical disclaimer for health-related responses
-                if (response.medicalDisclaimer) {
-                    const lastMessage = chatMessages.lastChild;
-                    const disclaimerDiv = document.createElement('div');
-                    disclaimerDiv.classList.add('medical-disclaimer');
-                    disclaimerDiv.textContent = "Disclaimer: This information is for educational purposes only and is not a substitute for professional medical advice. Please consult with a healthcare provider for personalized medical advice.";
-                    lastMessage.appendChild(disclaimerDiv);
-                }
-            }, 1500);
-        }
-
-        // Send message on button click with ripple effect
-        sendMessage.addEventListener('click', function(e) {
-            createRipple(e);
-            sendChatMessage();
-        });
-
-        // Send message on Enter key
-        chatInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendChatMessage();
-            }
-        });
-
-        // Enhanced message processing with multi-step appointment booking
-        function processMessage(message) {
-            const lowerMessage = message.toLowerCase();
-            
-            // Handle conversation flow based on current step
-            switch(conversationContext.currentStep) {
-                case 'greeting':
-                    if (lowerMessage.includes('appointment') || lowerMessage.includes('book') || lowerMessage.includes('schedule')) {
-                        conversationContext.currentStep = 'appointmentService';
-                        return {
-                            text: "I'd be happy to help you book an appointment! What type of service are you looking for?",
-                            quickReplies: ["General Check-up", "Vaccination", "Health Screening", "Other"],
-                            suggestions: ["What services do you offer?", "How do I prepare for an appointment?"],
-                            stepInfo: "Step 1 of 5: Service Selection"
-                        };
-                    } else if (lowerMessage.includes('service') || lowerMessage.includes('treatment')) {
-                        return {
-                            text: "We offer a comprehensive range of services:\n\n• General Check-ups: Complete health assessments\n• Diagnosis & Treatment: Evaluation and management of common conditions\n• Vaccinations: Immunizations for all ages\n• Health Counseling: Lifestyle and wellness guidance\n• Minor Procedures: In-office treatments\n• Health Screenings: Preventive testing\n\nWhich service would you like to know more about?",
-                            quickReplies: ["General Check-ups", "Vaccinations", "Health Counseling", "Tell me more"],
-                            suggestions: ["Book an appointment", "Clinic hours", "Insurance information"]
-                        };
-                    } else if (lowerMessage.includes('hours') || lowerMessage.includes('open')) {
-                        return {
-                            text: "Our clinic hours are:\n\n• Monday-Friday: 8:00 AM - 6:00 PM\n• Saturday: 9:00 AM - 2:00 PM\n• Sunday: Closed\n\nWe also offer telehealth appointments for certain conditions.",
-                            quickReplies: ["Book an appointment", "Location info", "Contact details"],
-                            suggestions: ["Services offered", "Emergency care", "Prescription refills"]
-                        };
-                    } else if (lowerMessage.includes('location') || lowerMessage.includes('address')) {
-                        return {
-                            text: "We're located at 123 Medical Center Drive, Healthville, HV 12345. We have ample parking available and the clinic is wheelchair accessible. We're conveniently located near public transportation.",
-                            quickReplies: ["Get directions", "Clinic hours", "Contact phone"],
-                            suggestions: ["Book an appointment", "Services offered", "Meet the staff"]
-                        };
-                    } else if (lowerMessage.includes('insurance') || lowerMessage.includes('payment')) {
-                        return {
-                            text: "We accept most major insurance plans including Blue Cross, Aetna, Cigna, and UnitedHealthcare. For specific coverage questions, please contact our billing department at (234) 567-8901. We also offer payment plans for self-pay patients and provide detailed cost estimates before treatment.",
-                            quickReplies: ["Book an appointment", "Services offered", "Contact details"],
-                            suggestions: ["What if I don't have insurance?", "Do you offer discounts?"]
-                        };
-                    } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-                        return {
-                            text: "Hello! I'm Dr. Nicko's AI assistant. How can I assist you today? I can help with appointment booking, service information, clinic details, or answer general health questions.",
-                            quickReplies: ["Book an appointment", "Services offered", "Clinic hours"],
-                            suggestions: ["I have a health question", "Meet Dr. Nicko", "Patient testimonials"]
-                        };
-                    } else if (lowerMessage.includes('thank')) {
-                        return {
-                            text: "You're welcome! Is there anything else I can help you with today?",
-                            quickReplies: ["Book an appointment", "Services info", "No, thank you"],
-                            suggestions: ["Clinic hours", "Location", "Contact information"]
-                        };
-                    } else {
-                        // Try to provide a health-related response
-                        const healthResponse = getHealthResponse(lowerMessage);
-                        if (healthResponse) {
-                            return healthResponse;
-                        }
-                        
-                        return {
-                            text: "I'm here to help with information about appointments, services, clinic hours, and general health questions. If you have a specific medical concern, it's best to schedule a consultation with Dr. Nicko for personalized advice.",
-                            quickReplies: ["Book an appointment", "Services offered", "Clinic hours"],
-                            suggestions: ["Location information", "Insurance questions", "Health resources"]
-                        };
-                    }
-                
-                case 'appointmentService':
-                    conversationContext.appointmentType = message;
-                    conversationContext.currentStep = 'appointmentName';
-                    return {
-                        text: `Great! I can help you schedule a ${message}. To get started, what's your full name?`,
-                        quickReplies: [],
-                        suggestions: [],
-                        stepInfo: "Step 2 of 5: Patient Information"
-                    };
-                
-                case 'appointmentName':
-                    conversationContext.userName = message;
-                    conversationContext.currentStep = 'appointmentContact';
-                    return {
-                        text: `Thanks, ${message}. What's the best phone number or email to reach you?`,
-                        quickReplies: [],
-                        suggestions: [],
-                        stepInfo: "Step 3 of 5: Contact Information"
-                    };
-                
-                case 'appointmentContact':
-                    conversationContext.userContact = message;
-                    conversationContext.currentStep = 'appointmentDate';
-                    return {
-                        text: `Perfect! When would you prefer to schedule your ${conversationContext.appointmentType}? Please provide a preferred date or time frame.`,
-                        quickReplies: ["As soon as possible", "Next week", "Next month"],
-                        suggestions: ["What's the earliest availability?", "Do you have weekend appointments?"],
-                        stepInfo: "Step 4 of 5: Preferred Date"
-                    };
-                
-                case 'appointmentDate':
-                    conversationContext.appointmentDate = message;
-                    conversationContext.currentStep = 'appointmentSymptoms';
-                    return {
-                        text: `Got it. Is there anything specific you'd like to discuss during your appointment, or any symptoms you're experiencing? This will help Dr. Nicko prepare for your visit.`,
-                        quickReplies: ["Routine check-up", "Follow-up", "Not sure"],
-                        suggestions: ["How should I prepare?", "What to bring to appointment?"],
-                        stepInfo: "Step 5 of 5: Additional Information"
-                    };
-                
-                case 'appointmentSymptoms':
-                    conversationContext.symptoms = message;
-                    conversationContext.currentStep = 'appointmentConfirmation';
-                    
-                    // Create appointment summary
-                    const summary = `
-                        <div class="appointment-summary">
-                            <h4>Appointment Summary</h4>
-                            <p><strong>Service:</strong> ${conversationContext.appointmentType}</p>
-                            <p><strong>Patient:</strong> ${conversationContext.userName}</p>
-                            <p><strong>Contact:</strong> ${conversationContext.userContact}</p>
-                            <p><strong>Preferred Date:</strong> ${conversationContext.appointmentDate}</p>
-                            <p><strong>Reason:</strong> ${conversationContext.symptoms}</p>
-                        </div>
-                    `;
-                    
-                    return {
-                        text: `Thank you for providing all the details! ${summary} I've sent an appointment request to our scheduling team. They'll contact you within 24 hours to confirm your appointment. Is there anything else I can help you with?`,
-                        quickReplies: ["Services info", "Clinic hours", "No, thank you"],
-                        suggestions: ["Prescription refills", "Insurance questions", "Health resources"],
-                        stepInfo: "Appointment Request Submitted"
-                    };
-                
-                case 'appointmentConfirmation':
-                    conversationContext.currentStep = 'greeting';
-                    return {
-                        text: "How else can I assist you today?",
-                        quickReplies: ["Book another appointment", "Services info", "Clinic hours"],
-                        suggestions: ["Location information", "Meet Dr. Nicko", "Health tips"]
-                    };
-                
-                default:
-                    conversationContext.currentStep = 'greeting';
-                    return {
-                        text: "How can I assist you today?",
-                        quickReplies: ["Book an appointment", "Services offered", "Clinic hours"],
-                        suggestions: ["Location information", "Insurance questions", "Health resources"]
-                    };
-            }
-        }
-        
-        // Enhanced health-related responses with structured advice
-        function getHealthResponse(message) {
-            if (message.includes('headache')) {
-                return {
-                    text: "Headaches can have various causes. Here's some general information:\n\n• Tension headaches: Often related to stress, poor posture, or eye strain\n• Migraines: Typically throbbing pain, sometimes with nausea or sensitivity to light/sound\n• Sinus headaches: Associated with sinus pressure and congestion\n\nGeneral self-care tips:\n• Stay hydrated\n• Rest in a quiet, dark room\n• Apply a cool compress to your forehead\n• Practice relaxation techniques\n\nWhen to seek medical attention:\n• Sudden, severe headache\n• Headache after head injury\n• Headache with fever, stiff neck, or confusion\n• Headache that worsens despite treatment\n\nFor persistent or severe headaches, it's best to consult with a healthcare provider for proper diagnosis and treatment.",
-                    quickReplies: ["Book an appointment", "Other symptoms", "Prevention tips"],
-                    suggestions: ["Migraine information", "Stress management", "When to go to ER"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('fever') || message.includes('temperature')) {
-                return {
-                    text: "Fever is a common symptom that often indicates your body is fighting an infection.\n\nGeneral guidelines:\n• Normal body temperature: Around 98.6°F (37°C)\n• Low-grade fever: 100.4°F (38°C) to 102.2°F (39°C)\n• High fever: Over 102.2°F (39°C)\n\nSelf-care measures:\n• Stay hydrated with water, broth, or electrolyte solutions\n• Rest as much as possible\n• Use over-the-counter fever reducers if appropriate (follow dosage instructions)\n• Wear lightweight clothing and use light bedding\n• Take a lukewarm bath or use cool compresses\n\nWhen to seek medical attention:\n• Fever over 103°F (39.4°C)\n• Fever lasting more than 3 days\n• Fever in infants under 3 months\n• Fever with rash, severe headache, stiff neck, or confusion\n• Fever in someone with a compromised immune system",
-                    quickReplies: ["Book an appointment", "When to worry", "Home care tips"],
-                    suggestions: ["Cold and flu symptoms", "Children's fever guidelines", "Infection prevention"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('cold') || message.includes('flu')) {
-                return {
-                    text: "Colds and influenza (flu) are respiratory illnesses with some overlapping symptoms:\n\nCommon Cold:\n• Gradual onset\n• Runny/stuffy nose, sneezing\n• Sore throat, cough\n• Mild fatigue\n\nInfluenza (Flu):\n• Sudden onset\n• Fever, body aches\n• Significant fatigue/weakness\n• Dry cough, headache\n\nSelf-care for colds and mild flu:\n• Rest and hydrate\n• Use over-the-counter symptom relief as needed\n• Gargle with salt water for sore throat\n• Use a humidifier for congestion\n• Eat nutritious foods\n\nPrevention:\n• Annual flu vaccine\n• Frequent hand washing\n• Avoid close contact with sick individuals\n• Don't touch your face with unwashed hands\n\nWhen to see a doctor:\n• Difficulty breathing\n• Symptoms worsening after improvement\n• High fever that doesn't respond to treatment\n• Symptoms lasting more than 10 days",
-                    quickReplies: ["Book an appointment", "Vaccination info", "Prevention tips"],
-                    suggestions: ["COVID-19 symptoms", "When to go to ER", "Boosting immune system"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('blood pressure') || message.includes('hypertension')) {
-                return {
-                    text: "Blood pressure is the force of blood pushing against artery walls. Here's what you should know:\n\nBlood Pressure Categories:\n• Normal: Less than 120/80 mmHg\n• Elevated: 120-129/<80 mmHg\n• Stage 1 Hypertension: 130-139/80-89 mmHg\n• Stage 2 Hypertension: 140+/90+ mmHg\n\nLifestyle modifications to help manage blood pressure:\n• Reduce sodium intake\n• Eat a balanced diet rich in fruits, vegetables, and whole grains\n• Maintain a healthy weight\n• Exercise regularly (at least 150 minutes per week)\n• Limit alcohol consumption\n• Manage stress through relaxation techniques\n• Don't smoke\n\nWhen to monitor your blood pressure:\n• If you have risk factors (family history, overweight, etc.)\n• If you've been diagnosed with high blood pressure\n• During routine check-ups\n\nRegular monitoring and consultation with a healthcare provider are important for proper management of blood pressure.",
-                    quickReplies: ["Book an appointment", "Healthy lifestyle tips", "Risk factors"],
-                    suggestions: ["Heart-healthy diet", "Stress reduction techniques", "Exercise recommendations"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('vaccine') || message.includes('vaccination')) {
-                return {
-                    text: "Vaccinations are a crucial part of preventive healthcare. Here's an overview:\n\nRoutine Vaccinations by Age:\n• Children: DTaP, polio, MMR, varicella, hepatitis B, etc.\n• Adolescents: HPV, meningococcal, Tdap\n• Adults: Td/Tdap booster every 10 years, shingles (after 50), pneumonia (after 65)\n• All ages: Annual flu vaccine\n\nSpecial Considerations:\n• Travel vaccines based on destination\n• Pregnancy-specific recommendations\n• Immunocompromised individuals\n\nCommon Questions:\n• Vaccines are extensively tested for safety and effectiveness\n• Side effects are typically mild (soreness, low-grade fever)\n• The benefits of vaccination far outweigh the risks\n• Herd immunity protects those who can't be vaccinated\n\nDr. Nicko can provide personalized vaccine recommendations based on your age, health status, and lifestyle.",
-                    quickReplies: ["Book vaccination", "Vaccine schedule", "Safety information"],
-                    suggestions: ["Travel health", "Child immunization", "COVID-19 vaccines"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('check') && message.includes('up')) {
-                return {
-                    text: "Regular check-ups are essential for maintaining health and detecting potential issues early.\n\nWhat to expect during a check-up:\n• Review of medical history and current concerns\n• Physical examination\n• Vital signs check (blood pressure, heart rate, etc.)\n• Screening tests based on age, gender, and risk factors\n• Health counseling and preventive guidance\n\nRecommended frequency:\n• Adults: Generally annually, but may vary based on health status\n• Children: More frequent visits for growth monitoring and vaccinations\n• Seniors: May require more comprehensive assessments\n\nHow to prepare:\n• Bring a list of current medications and supplements\n• Note any symptoms or health concerns\n• Bring insurance information and photo ID\n• Consider bringing a family member for support\n\nRegular check-ups allow Dr. Nicko to monitor your health over time and provide personalized preventive care.",
-                    quickReplies: ["Book a check-up", "What to expect", "Preparation tips"],
-                    suggestions: ["Preventive screenings", "Health risk assessment", "Wellness exams"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('stress') || message.includes('anxiety')) {
-                return {
-                    text: "Managing stress is important for both mental and physical health. Here are some strategies:\n\nStress Management Techniques:\n• Deep breathing exercises\n• Progressive muscle relaxation\n• Mindfulness and meditation\n• Regular physical activity\n• Adequate sleep (7-9 hours per night)\n• Healthy nutrition\n• Time management and prioritization\n• Setting realistic expectations\n\nSigns that stress may be affecting your health:\n• Persistent headaches\n• Digestive issues\n• Sleep disturbances\n• Changes in appetite\n• Difficulty concentrating\n• Irritability or mood changes\n\nWhen to seek professional help:\n• Stress interfering with daily functioning\n• Persistent feelings of anxiety or depression\n• Using substances to cope with stress\n• Thoughts of self-harm\n\nDr. Nicko can provide guidance on stress management and refer you to mental health resources if needed.",
-                    quickReplies: ["Book an appointment", "Stress management tips", "Mental health resources"],
-                    suggestions: ["Meditation techniques", "Sleep improvement", "Work-life balance"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('diet') || message.includes('nutrition')) {
-                return {
-                    text: "A balanced diet is fundamental to good health. Here are some general nutrition guidelines:\n\nHealthy Eating Principles:\n• Fill half your plate with fruits and vegetables\n• Choose whole grains over refined grains\n• Include lean protein sources\n• Incorporate healthy fats (avocado, nuts, olive oil)\n• Limit added sugars and saturated fats\n• Stay hydrated with water as your primary beverage\n\nSpecial Considerations:\n• Individual needs vary based on age, activity level, and health conditions\n• Certain medical conditions may require specific dietary modifications\n• Food allergies or intolerances need careful management\n\nNutrition Tips:\n• Eat mindfully, paying attention to hunger and fullness cues\n• Cook at home more often to control ingredients\n• Read nutrition labels when shopping\n• Plan meals and snacks to avoid impulsive choices\n\nDr. Nicko can provide personalized nutrition advice based on your health profile and goals.",
-                    quickReplies: ["Nutrition counseling", "Healthy eating tips", "Book an appointment"],
-                    suggestions: ["Weight management", "Special diets", "Meal planning"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('exercise') || message.includes('fitness')) {
-                return {
-                    text: "Regular physical activity has numerous health benefits. Here's what you should know:\n\nExercise Recommendations:\n• Adults: At least 150 minutes of moderate-intensity or 75 minutes of vigorous-intensity aerobic activity per week\n• Include muscle-strengthening activities at least 2 days per week\n• Incorporate flexibility and balance exercises, especially for older adults\n\nTypes of Exercise:\n• Aerobic: Walking, swimming, cycling, dancing\n• Strength training: Weight lifting, resistance bands, bodyweight exercises\n• Flexibility: Stretching, yoga, Pilates\n• Balance: Tai chi, balance exercises\n\nGetting Started:\n• Start slowly and gradually increase intensity and duration\n• Choose activities you enjoy\n• Consider any health limitations or conditions\n• Wear appropriate footwear and clothing\n• Stay hydrated during exercise\n\nBefore starting a new exercise program, especially if you have health concerns, it's wise to consult with a healthcare provider.",
-                    quickReplies: ["Exercise recommendations", "Health benefits", "Book an appointment"],
-                    suggestions: ["Beginner workouts", "Exercise with health conditions", "Staying motivated"],
-                    medicalDisclaimer: true
-                };
-            } else if (message.includes('sleep') || message.includes('insomnia')) {
-                return {
-                    text: "Quality sleep is essential for physical and mental health. Here's information about sleep:\n\nSleep Recommendations by Age:\n• Adults: 7-9 hours per night\n• Teenagers: 8-10 hours per night\n• School-age children: 9-12 hours per night\n• Preschoolers: 10-13 hours per night (including naps)\n\nSleep Hygiene Tips:\n• Maintain a consistent sleep schedule, even on weekends\n• Create a relaxing bedtime routine\n• Ensure your bedroom is cool, dark, and quiet\n• Avoid screens (phones, tablets, TV) at least an hour before bed\n• Limit caffeine and alcohol, especially in the evening\n• Exercise regularly, but not too close to bedtime\n• Manage stress through relaxation techniques\n\nWhen to seek help for sleep issues:\n• Difficulty falling or staying asleep most nights\n• Daytime fatigue affecting daily activities\n• Loud snoring, gasping, or pauses in breathing during sleep\n• Unrefreshing sleep despite adequate time in bed\n\nDr. Nicko can help identify potential causes of sleep problems and recommend appropriate treatments.",
-                    quickReplies: ["Sleep hygiene tips", "When to seek help", "Book an appointment"],
-                    suggestions: ["Relaxation techniques", "Sleep disorders", "Natural sleep aids"],
-                    medicalDisclaimer: true
-                };
-            }
-            
-            return null;
-        }
-
-        // Form submissions and other existing JavaScript remains the same
-    </script>
+    draw();
+  </script>
 </body>
 </html>
