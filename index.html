@@ -18,6 +18,18 @@
             --shadow: rgba(0, 0, 0, 0.1);
         }
 
+        /* Accessibility High Contrast Mode */
+        .high-contrast {
+            --primary: #0066CC;
+            --primary-dark: #004499;
+            --secondary: #000000;
+            --accent: #E6F2FF;
+            --background: #FFFFFF;
+            --text: #000000;
+            --text-light: #333333;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
         /* Global Styles */
         * {
             margin: 0;
@@ -31,6 +43,7 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: all 0.3s ease;
         }
 
         .container {
@@ -1084,6 +1097,351 @@
             outline: none;
         }
 
+        /* NEW FEATURES STYLES */
+
+        /* Patient Portal Styles */
+        .portal-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .portal-sidebar {
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .portal-content {
+            flex: 3;
+        }
+
+        .portal-nav {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            overflow: hidden;
+        }
+
+        .portal-nav-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .portal-nav-item:hover {
+            background-color: var(--accent);
+        }
+
+        .portal-nav-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .portal-section {
+            display: none;
+        }
+
+        .portal-section.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .portal-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Health Tracking Styles */
+        .tracking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .tracking-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .tracking-chart {
+            height: 200px;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 15px;
+        }
+
+        .chart-bar {
+            width: 30px;
+            background: var(--primary);
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            background: var(--primary-dark);
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .chart-label {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .data-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .data-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Emergency Info Styles */
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .emergency-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .emergency-card.urgent {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .emergency-card.urgent h3,
+        .emergency-card.urgent p {
+            color: white;
+        }
+
+        .emergency-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 15px 0;
+            color: var(--primary);
+        }
+
+        .emergency-card.urgent .emergency-number {
+            color: white;
+        }
+
+        .symptom-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .symptom-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .symptom-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Prescription Refill Styles */
+        .prescription-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .medication-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .medication-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .medication-name {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .refill-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Telemedicine Styles */
+        .telemedicine-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .video-container {
+            flex: 2;
+            background: #1a1a1a;
+            border-radius: 12px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .controls-container {
+            flex: 1;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .control-btn.secondary {
+            background: #6c757d;
+        }
+
+        .control-btn.secondary:hover {
+            background: #545b62;
+        }
+
+        .participant-list {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .participant {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .participant:last-child {
+            border-bottom: none;
+        }
+
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        /* Accessibility Toolbar */
+        .accessibility-toolbar {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px 0 0 8px;
+            z-index: 999;
+            padding: 10px;
+        }
+
+        .accessibility-btn {
+            display: block;
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .accessibility-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Text Size Controls */
+        .text-small { font-size: 0.8rem; }
+        .text-normal { font-size: 1rem; }
+        .text-large { font-size: 1.2rem; }
+        .text-xlarge { font-size: 1.4rem; }
+
         /* Animations */
         @keyframes fadeInLeft {
             from {
@@ -1155,6 +1513,18 @@
             .contact-content {
                 flex-direction: column;
             }
+
+            .portal-container {
+                flex-direction: column;
+            }
+
+            .portal-sidebar {
+                max-width: 100%;
+            }
+
+            .telemedicine-container {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1211,6 +1581,20 @@
                 width: 95%;
                 padding: 20px;
             }
+
+            .accessibility-toolbar {
+                top: auto;
+                bottom: 80px;
+                right: 10px;
+                transform: none;
+                flex-direction: row;
+                display: flex;
+                gap: 5px;
+            }
+
+            .accessibility-btn {
+                margin-bottom: 0;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1233,10 +1617,31 @@
             .blog-grid {
                 grid-template-columns: 1fr;
             }
+
+            .tracking-grid,
+            .emergency-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Accessibility Toolbar -->
+    <div class="accessibility-toolbar">
+        <button class="accessibility-btn" id="contrastToggle" title="High Contrast Mode">
+            <i class="fas fa-adjust"></i>
+        </button>
+        <button class="accessibility-btn" id="textSizeIncrease" title="Increase Text Size">
+            <i class="fas fa-text-height"></i>
+        </button>
+        <button class="accessibility-btn" id="textSizeDecrease" title="Decrease Text Size">
+            <i class="fas fa-text-width"></i>
+        </button>
+        <button class="accessibility-btn" id="screenReaderHelp" title="Screen Reader Help">
+            <i class="fas fa-universal-access"></i>
+        </button>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <div class="container nav-container">
@@ -1252,8 +1657,11 @@
                 <li><a href="#" data-page="about">About</a></li>
                 <li><a href="#" data-page="services">Services</a></li>
                 <li><a href="#" data-page="appointment">Appointments</a></li>
+                <li><a href="#" data-page="patient-portal">Patient Portal</a></li>
+                <li><a href="#" data-page="telemedicine">Telemedicine</a></li>
                 <li><a href="#" data-page="testimonials">Testimonials</a></li>
                 <li><a href="#" data-page="blog">Blog</a></li>
+                <li><a href="#" data-page="emergency">Emergency Info</a></li>
                 <li><a href="#" data-page="contact">Contact</a></li>
             </ul>
         </div>
@@ -1476,20 +1884,19 @@
                     </div>
                     <div class="card service-card fade-in">
                         <div class="service-icon">
-                            <i class="fas fa-file-medical"></i>
+                            <i class="fas fa-prescription-bottle"></i>
                         </div>
-                        <h3>Health Screenings</h3>
-                        <p>Comprehensive screening tests to detect health issues before symptoms appear.</p>
-                        <button class="btn btn-outline learn-more-btn" data-service="screenings">Learn More</button>
-                        <div class="service-detail" id="screenings-detail">
-                            <p>We offer various health screenings:</p>
+                        <h3>Prescription Refills</h3>
+                        <p>Convenient online prescription refill requests for your ongoing medications.</p>
+                        <button class="btn btn-outline learn-more-btn" data-service="refills">Learn More</button>
+                        <div class="service-detail" id="refills-detail">
+                            <p>Our prescription refill service offers:</p>
                             <ul>
-                                <li>Cardiovascular risk assessment</li>
-                                <li>Cancer screenings (skin, colon, prostate, breast)</li>
-                                <li>Bone density testing</li>
-                                <li>Vision and hearing tests</li>
-                                <li>Diabetes screening</li>
-                                <li>Thyroid function tests</li>
+                                <li>Online refill requests 24/7</li>
+                                <li>Automatic reminders when refills are due</li>
+                                <li>Direct sending to your preferred pharmacy</li>
+                                <li>Tracking of refill status</li>
+                                <li>Secure handling of your medication information</li>
                             </ul>
                         </div>
                     </div>
@@ -1573,6 +1980,398 @@
         </section>
     </div>
 
+    <!-- Patient Portal Page -->
+    <div id="patient-portal" class="page">
+        <section class="patient-portal">
+            <div class="container">
+                <h2>Patient Portal</h2>
+                <p class="text-center">Access your medical records, upcoming appointments, and health information securely.</p>
+                
+                <div class="portal-container">
+                    <div class="portal-sidebar">
+                        <div class="portal-nav">
+                            <div class="portal-nav-item active" data-section="login">Login</div>
+                            <div class="portal-nav-item" data-section="dashboard">Dashboard</div>
+                            <div class="portal-nav-item" data-section="appointments">Appointments</div>
+                            <div class="portal-nav-item" data-section="medical-records">Medical Records</div>
+                            <div class="portal-nav-item" data-section="prescription-refills">Prescription Refills</div>
+                            <div class="portal-nav-item" data-section="health-tracking">Health Tracking</div>
+                        </div>
+                    </div>
+                    
+                    <div class="portal-content">
+                        <!-- Login Section -->
+                        <div class="portal-section active" id="login-section">
+                            <div class="portal-card">
+                                <h3>Login to Your Account</h3>
+                                <form class="login-form">
+                                    <div class="form-group">
+                                        <label for="username">Username or Email</label>
+                                        <input type="text" id="username" class="form-control" placeholder="Enter your username or email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                                    </div>
+                                    <button type="submit" class="btn">Login</button>
+                                    <p style="margin-top: 15px; text-align: center;">
+                                        <a href="#">Forgot your password?</a> | <a href="#">Create an account</a>
+                                    </p>
+                                </form>
+                            </div>
+                            
+                            <div class="portal-card">
+                                <h3>New Patient Registration</h3>
+                                <p>If you're a new patient, you can create an account to access our online services.</p>
+                                <a href="#" class="btn btn-outline">Register Now</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Dashboard Section -->
+                        <div class="portal-section" id="dashboard-section">
+                            <div class="portal-card">
+                                <h3>Welcome, Sarah Johnson</h3>
+                                <p>Last login: Today at 10:30 AM</p>
+                                
+                                <div class="dashboard-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                                    <div class="stat-card" style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                        <div class="stat-number" style="font-size: 2rem; font-weight: bold; color: var(--primary);">2</div>
+                                        <div class="stat-label">Upcoming Appointments</div>
+                                    </div>
+                                    <div class="stat-card" style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                        <div class="stat-number" style="font-size: 2rem; font-weight: bold; color: var(--primary);">1</div>
+                                        <div class="stat-label">Pending Refills</div>
+                                    </div>
+                                    <div class="stat-card" style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                        <div class="stat-number" style="font-size: 2rem; font-weight: bold; color: var(--primary);">5</div>
+                                        <div class="stat-label">Health Records</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="portal-card">
+                                <h3>Recent Activity</h3>
+                                <ul style="list-style: none;">
+                                    <li style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                        <strong>Appointment Scheduled</strong> - Annual Check-up on May 15, 2025
+                                    </li>
+                                    <li style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                        <strong>Prescription Refill</strong> - Lisinopril requested on April 28, 2025
+                                    </li>
+                                    <li style="padding: 10px 0;">
+                                        <strong>Lab Results</strong> - Blood test results available on April 15, 2025
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Appointments Section -->
+                        <div class="portal-section" id="appointments-section">
+                            <div class="portal-card">
+                                <h3>Your Appointments</h3>
+                                
+                                <div class="appointment-list">
+                                    <div class="appointment-item" style="padding: 15px; border: 1px solid #f0f0f0; border-radius: 8px; margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <h4 style="margin: 0;">Annual Physical Examination</h4>
+                                                <p style="margin: 5px 0;">Dr. Nicko</p>
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <p style="margin: 0; font-weight: bold;">May 15, 2025</p>
+                                                <p style="margin: 5px 0;">10:00 AM - 11:00 AM</p>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <button class="btn" style="margin-right: 10px;">Reschedule</button>
+                                            <button class="btn btn-outline">Cancel</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="appointment-item" style="padding: 15px; border: 1px solid #f0f0f0; border-radius: 8px; margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <h4 style="margin: 0;">Follow-up Consultation</h4>
+                                                <p style="margin: 5px 0;">Dr. Nicko</p>
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <p style="margin: 0; font-weight: bold;">June 2, 2025</p>
+                                                <p style="margin: 5px 0;">2:30 PM - 3:00 PM</p>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <button class="btn" style="margin-right: 10px;">Reschedule</button>
+                                            <button class="btn btn-outline">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div style="text-align: center; margin-top: 20px;">
+                                    <a href="#" class="btn book-online-btn">Schedule New Appointment</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Medical Records Section -->
+                        <div class="portal-section" id="medical-records-section">
+                            <div class="portal-card">
+                                <h3>Your Medical Records</h3>
+                                <p>Access your health information and medical history.</p>
+                                
+                                <div class="records-list">
+                                    <div class="record-item" style="padding: 15px; border: 1px solid #f0f0f0; border-radius: 8px; margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <h4 style="margin: 0;">Lab Results - Blood Test</h4>
+                                                <p style="margin: 5px 0;">Completed on April 15, 2025</p>
+                                            </div>
+                                            <button class="btn">View</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="record-item" style="padding: 15px; border: 1px solid #f0f0f0; border-radius: 8px; margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <h4 style="margin: 0;">Visit Summary - Annual Physical</h4>
+                                                <p style="margin: 5px 0;">Completed on March 10, 2025</p>
+                                            </div>
+                                            <button class="btn">View</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="record-item" style="padding: 15px; border: 1px solid #f0f0f0; border-radius: 8px; margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <h4 style="margin: 0;">Immunization Record</h4>
+                                                <p style="margin: 5px 0;">Last updated on February 5, 2025</p>
+                                            </div>
+                                            <button class="btn">View</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Prescription Refills Section -->
+                        <div class="portal-section" id="prescription-refills-section">
+                            <div class="portal-card">
+                                <h3>Prescription Refills</h3>
+                                <p>Request refills for your current medications.</p>
+                                
+                                <div class="refill-list">
+                                    <div class="medication-item">
+                                        <div class="medication-header">
+                                            <span class="medication-name">Lisinopril 10mg</span>
+                                            <span class="refill-status status-available">Available for Refill</span>
+                                        </div>
+                                        <p>For high blood pressure. Last filled on April 1, 2025.</p>
+                                        <div style="margin-top: 10px;">
+                                            <button class="btn">Request Refill</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="medication-item">
+                                        <div class="medication-header">
+                                            <span class="medication-name">Atorvastatin 20mg</span>
+                                            <span class="refill-status status-pending">Pending Approval</span>
+                                        </div>
+                                        <p>For cholesterol management. Request submitted on April 28, 2025.</p>
+                                        <div style="margin-top: 10px;">
+                                            <button class="btn" disabled>Pending</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="medication-item">
+                                        <div class="medication-header">
+                                            <span class="medication-name">Metformin 500mg</span>
+                                            <span class="refill-status status-available">Available for Refill</span>
+                                        </div>
+                                        <p>For type 2 diabetes. Last filled on April 5, 2025.</p>
+                                        <div style="margin-top: 10px;">
+                                            <button class="btn">Request Refill</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div style="text-align: center; margin-top: 20px;">
+                                    <a href="#" class="btn">Request New Prescription</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Health Tracking Section -->
+                        <div class="portal-section" id="health-tracking-section">
+                            <div class="portal-card">
+                                <h3>Health Tracking</h3>
+                                <p>Monitor and track your health metrics over time.</p>
+                                
+                                <div class="tracking-grid">
+                                    <div class="tracking-card">
+                                        <h4>Blood Pressure</h4>
+                                        <div class="tracking-chart">
+                                            <div class="chart-bar" style="height: 70%;">
+                                                <span class="chart-value">120/80</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 75%;">
+                                                <span class="chart-value">125/82</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 65%;">
+                                                <span class="chart-value">118/78</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 80%;">
+                                                <span class="chart-value">130/85</span>
+                                            </div>
+                                        </div>
+                                        <div class="data-input">
+                                            <input type="text" placeholder="Systolic">
+                                            <input type="text" placeholder="Diastolic">
+                                            <button class="btn">Add</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tracking-card">
+                                        <h4>Weight</h4>
+                                        <div class="tracking-chart">
+                                            <div class="chart-bar" style="height: 60%;">
+                                                <span class="chart-value">165</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 65%;">
+                                                <span class="chart-value">167</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 55%;">
+                                                <span class="chart-value">163</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 50%;">
+                                                <span class="chart-value">160</span>
+                                            </div>
+                                        </div>
+                                        <div class="data-input">
+                                            <input type="text" placeholder="Weight (lbs)">
+                                            <button class="btn">Add</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tracking-card">
+                                        <h4>Blood Sugar</h4>
+                                        <div class="tracking-chart">
+                                            <div class="chart-bar" style="height: 50%;">
+                                                <span class="chart-value">95</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 65%;">
+                                                <span class="chart-value">110</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 45%;">
+                                                <span class="chart-value">92</span>
+                                            </div>
+                                            <div class="chart-bar" style="height: 70%;">
+                                                <span class="chart-value">115</span>
+                                            </div>
+                                        </div>
+                                        <div class="data-input">
+                                            <input type="text" placeholder="Glucose (mg/dL)">
+                                            <button class="btn">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Telemedicine Page -->
+    <div id="telemedicine" class="page">
+        <section class="telemedicine">
+            <div class="container">
+                <h2>Telemedicine Services</h2>
+                <p class="text-center">Connect with Dr. Nicko from the comfort of your home through secure video consultations.</p>
+                
+                <div class="telemedicine-container">
+                    <div class="video-container">
+                        <div style="text-align: center;">
+                            <i class="fas fa-video" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <h3 style="color: white;">Video Consultation</h3>
+                            <p style="color: #ccc;">Your consultation will begin shortly</p>
+                            <div style="margin-top: 20px;">
+                                <button class="btn" style="margin-right: 10px;">Start Call</button>
+                                <button class="btn btn-secondary">Test Audio/Video</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-container">
+                        <div class="control-buttons">
+                            <button class="control-btn">
+                                <i class="fas fa-microphone"></i>
+                                <div>Mute</div>
+                            </button>
+                            <button class="control-btn">
+                                <i class="fas fa-video"></i>
+                                <div>Video Off</div>
+                            </button>
+                            <button class="control-btn secondary">
+                                <i class="fas fa-desktop"></i>
+                                <div>Share Screen</div>
+                            </button>
+                            <button class="control-btn secondary">
+                                <i class="fas fa-comment-medical"></i>
+                                <div>Chat</div>
+                            </button>
+                        </div>
+                        
+                        <div class="participant-list">
+                            <h4>Participants</h4>
+                            <div class="participant">
+                                <div class="participant-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold;">Dr. Nicko</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-light);">Online</div>
+                                </div>
+                            </div>
+                            <div class="participant">
+                                <div class="participant-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold;">You</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-light);">Connecting...</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: center;">
+                            <button class="btn" style="background: #dc3545;">
+                                <i class="fas fa-phone-slash"></i> End Call
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 40px;">
+                    <div class="portal-card">
+                        <h3>Before Your Telemedicine Appointment</h3>
+                        <ul>
+                            <li>Test your audio and video equipment before the call</li>
+                            <li>Ensure you have a stable internet connection</li>
+                            <li>Find a quiet, private space for your consultation</li>
+                            <li>Have your insurance information and ID ready</li>
+                            <li>Prepare a list of questions or concerns you want to discuss</li>
+                            <li>Have your current medications available for reference</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="text-center" style="margin-top: 30px;">
+                        <a href="#" class="btn book-online-btn">Schedule Telemedicine Appointment</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <!-- Testimonials Page -->
     <div id="testimonials" class="page">
         <section class="testimonials">
@@ -1620,82 +2419,12 @@
                             <p class="testimonial-text">"The entire staff is friendly and efficient. Wait times are minimal, and Dr. Nicko explains everything in terms I can understand. Highly recommended!"</p>
                             <p class="testimonial-author">- Jennifer Lee</p>
                         </div>
-                        
-                        <!-- Testimonial 4 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"After struggling with chronic migraines for years, Dr. Nicko found the root cause and developed a treatment plan that actually works. I finally have my life back!"</p>
-                            <p class="testimonial-author">- David Rodriguez</p>
-                        </div>
-                        
-                        <!-- Testimonial 5 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"Dr. Nicko treated my whole family for years. He's knowledgeable, patient, and genuinely cares about our wellbeing. We wouldn't trust anyone else with our health."</p>
-                            <p class="testimonial-author">- Maria Garcia</p>
-                        </div>
-                        
-                        <!-- Testimonial 6 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"I was nervous about my first physical in years, but Dr. Nicko made me feel completely at ease. He explained everything clearly and didn't rush through the appointment."</p>
-                            <p class="testimonial-author">- James Wilson</p>
-                        </div>
-                        
-                        <!-- Testimonial 7 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <p class="testimonial-text">"Dr. Nicko helped me manage my diabetes better than any other doctor I've seen. His practical advice and ongoing support have made a real difference in my health."</p>
-                            <p class="testimonial-author">- Patricia Brown</p>
-                        </div>
-                        
-                        <!-- Testimonial 8 -->
-                        <div class="testimonial-card fade-in">
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"As a senior patient, I appreciate how Dr. Nicko takes the time to address all my concerns without making me feel rushed. He's truly one of a kind."</p>
-                            <p class="testimonial-author">- Robert Davis</p>
-                        </div>
                     </div>
                     
                     <div class="testimonial-nav">
                         <div class="testimonial-dot active" data-testimonial="0"></div>
                         <div class="testimonial-dot" data-testimonial="1"></div>
                         <div class="testimonial-dot" data-testimonial="2"></div>
-                        <div class="testimonial-dot" data-testimonial="3"></div>
-                        <div class="testimonial-dot" data-testimonial="4"></div>
-                        <div class="testimonial-dot" data-testimonial="5"></div>
-                        <div class="testimonial-dot" data-testimonial="6"></div>
-                        <div class="testimonial-dot" data-testimonial="7"></div>
                     </div>
                 </div>
                 
@@ -1729,170 +2458,85 @@
                             <a href="#" class="btn btn-outline read-more-btn" data-blog="1">Read More</a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Emergency Info Page -->
+    <div id="emergency" class="page">
+        <section class="emergency">
+            <div class="container">
+                <h2>Emergency Information</h2>
+                <p class="text-center">Important contacts and guidance for medical emergencies. In case of life-threatening situations, call emergency services immediately.</p>
+                
+                <div class="emergency-grid">
+                    <div class="emergency-card urgent">
+                        <i class="fas fa-ambulance" style="font-size: 2.5rem; margin-bottom: 15px;"></i>
+                        <h3>Emergency Services</h3>
+                        <div class="emergency-number">911</div>
+                        <p>Call immediately for life-threatening emergencies</p>
+                    </div>
                     
-                    <!-- Blog Post 2 -->
-                    <div class="card blog-card fade-in">
-                        <div class="blog-image">
-                            <img src="https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Immune System">
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <span class="blog-date">April 28, 2025</span>
-                                <span class="blog-category">Immunology</span>
+                    <div class="emergency-card">
+                        <i class="fas fa-hospital" style="font-size: 2.5rem; margin-bottom: 15px; color: var(--primary);"></i>
+                        <h3>Local Emergency Room</h3>
+                        <div class="emergency-number">(234) 567-8910</div>
+                        <p>Healthville General Hospital</p>
+                        <p>456 Emergency Drive, Healthville</p>
+                    </div>
+                    
+                    <div class="emergency-card">
+                        <i class="fas fa-phone-alt" style="font-size: 2.5rem; margin-bottom: 15px; color: var(--primary);"></i>
+                        <h3>After-Hours Line</h3>
+                        <div class="emergency-number">(234) 567-8901</div>
+                        <p>For urgent medical concerns outside office hours</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 40px;">
+                    <div class="portal-card">
+                        <h3>When to Seek Emergency Care</h3>
+                        <p>Go to the emergency room or call 911 immediately if you experience any of these symptoms:</p>
+                        
+                        <div class="symptom-list">
+                            <div class="symptom-item">
+                                <strong>Chest pain or pressure</strong> - Especially if it radiates to your arm, neck, or jaw
                             </div>
-                            <h3>Boosting Your Immune System Naturally</h3>
-                            <p class="blog-excerpt">Your immune system is your body's defense against infections and diseases. Learn about scientifically-backed ways to strengthen your immune response through nutrition, lifestyle changes, and proper sleep habits.</p>
-                            <a href="#" class="btn btn-outline read-more-btn" data-blog="2">Read More</a>
+                            <div class="symptom-item">
+                                <strong>Difficulty breathing or shortness of breath</strong>
+                            </div>
+                            <div class="symptom-item">
+                                <strong>Severe abdominal pain</strong>
+                            </div>
+                            <div class="symptom-item">
+                                <strong>Sudden weakness or numbness</strong> - Especially on one side of the body
+                            </div>
+                            <div class="symptom-item">
+                                <strong>Sudden vision changes</strong>
+                            </div>
+                            <div class="symptom-item">
+                                <strong>Confusion or difficulty speaking</strong>
+                            </div>
+                            <div class="symptom-item">
+                                <strong>Severe bleeding that won't stop</strong>
+                            </div>
+                            <div class="symptom-item">
+                                <strong>Suicidal or homicidal thoughts</strong>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Blog Post 3 -->
-                    <div class="card blog-card fade-in">
-                        <div class="blog-image">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Mental Health">
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <span class="blog-date">April 10, 2025</span>
-                                <span class="blog-category">Mental Health</span>
-                            </div>
-                            <h3>The Mind-Body Connection: Managing Stress Effectively</h3>
-                            <p class="blog-excerpt">Chronic stress can have profound effects on both mental and physical health. Explore practical techniques for stress management and understand how mental wellbeing directly impacts your physical health.</p>
-                            <a href="#" class="btn btn-outline read-more-btn" data-blog="3">Read More</a>
-                        </div>
+                    <div class="portal-card">
+                        <h3>Poison Control</h3>
+                        <div class="emergency-number">1-800-222-1222</div>
+                        <p>Call immediately if you suspect poisoning from medications, chemicals, or other substances.</p>
                     </div>
-                </div>
-                
-                <!-- Full Blog Articles (hidden by default) -->
-                <div class="blog-full" id="blog-1">
-                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-                    <div class="blog-header">
-                        <div class="blog-meta">
-                            <span class="blog-date">May 15, 2025</span>
-                            <span class="blog-category">Cardiology</span>
-                        </div>
-                        <h2>5 Simple Ways to Keep Your Heart Healthy</h2>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Healthy Heart" class="blog-featured-image">
-                    <div class="blog-content-full">
-                        <p>Heart disease remains the leading cause of death worldwide, but the good news is that many risk factors are preventable. By making simple lifestyle changes, you can significantly reduce your risk of developing cardiovascular problems. Here are five evidence-based strategies to maintain optimal heart health.</p>
-                        
-                        <h3>1. Adopt a Heart-Healthy Diet</h3>
-                        <p>A balanced diet rich in fruits, vegetables, whole grains, and lean proteins can work wonders for your cardiovascular system. Focus on incorporating foods high in fiber and antioxidants while limiting saturated fats, trans fats, and sodium. The Mediterranean diet, in particular, has been extensively studied and shown to reduce heart disease risk by up to 30%.</p>
-                        
-                        <h3>2. Stay Physically Active</h3>
-                        <p>Regular exercise strengthens your heart muscle, improves circulation, and helps maintain a healthy weight. Aim for at least 150 minutes of moderate-intensity aerobic activity or 75 minutes of vigorous activity each week. Even simple activities like brisk walking, cycling, or swimming can make a significant difference in your heart health.</p>
-                        
-                        <h3>3. Maintain a Healthy Weight</h3>
-                        <p>Excess weight, particularly around the abdomen, puts additional strain on your heart and increases your risk of high blood pressure, high cholesterol, and type 2 diabetes. Even a modest weight loss of 5-10% of your body weight can improve blood pressure, cholesterol levels, and reduce inflammation.</p>
-                        
-                        <h3>4. Don't Smoke and Limit Alcohol</h3>
-                        <p>Smoking is one of the most significant risk factors for heart disease. Chemicals in tobacco can damage your heart and blood vessels, leading to narrowed arteries (atherosclerosis). If you smoke, quitting is the single best thing you can do for your heart. Additionally, limit alcohol consumption to moderate levels – no more than one drink per day for women and two for men.</p>
-                        
-                        <h3>5. Manage Stress and Get Quality Sleep</h3>
-                        <p>Chronic stress and poor sleep can contribute to high blood pressure and other heart disease risk factors. Practice stress-reduction techniques such as meditation, deep breathing, or yoga. Aim for 7-9 hours of quality sleep per night, as sleep allows your heart to rest and repair.</p>
-                        
-                        <p>Remember, small changes can lead to significant improvements in your heart health over time. Consult with your healthcare provider before making major lifestyle changes, especially if you have existing health conditions.</p>
-                    </div>
-                </div>
-                
-                <div class="blog-full" id="blog-2">
-                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-                    <div class="blog-header">
-                        <div class="blog-meta">
-                            <span class="blog-date">April 28, 2025</span>
-                            <span class="blog-category">Immunology</span>
-                        </div>
-                        <h2>Boosting Your Immune System Naturally</h2>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Immune System" class="blog-featured-image">
-                    <div class="blog-content-full">
-                        <p>Your immune system is a complex network of cells, tissues, and organs that work together to defend your body against harmful pathogens. While no magic pill can "boost" your immunity overnight, several lifestyle factors can help optimize your immune function. Here's what the science says about naturally supporting your body's defense system.</p>
-                        
-                        <h3>Nutrition for Immunity</h3>
-                        <p>A well-balanced diet provides the essential nutrients your immune system needs to function properly. Key nutrients include:</p>
-                        <ul>
-                            <li><strong>Vitamin C:</strong> Found in citrus fruits, bell peppers, and broccoli, it supports various cellular functions of both innate and adaptive immune systems.</li>
-                            <li><strong>Vitamin D:</strong> Crucial for immune function; consider supplements if you have limited sun exposure.</li>
-                            <li><strong>Zinc:</strong> Found in lean meats, seafood, and legumes, it helps immune cells develop and communicate.</li>
-                            <li><strong>Probiotics:</strong> Fermented foods like yogurt and kimchi support gut health, where about 70% of your immune system resides.</li>
-                        </ul>
-                        
-                        <h3>The Importance of Sleep</h3>
-                        <p>During sleep, your body produces and distributes key immune cells like cytokines, T cells, and interleukin 12. Chronic sleep deprivation can make you more susceptible to illnesses. Adults should aim for 7-9 hours of quality sleep per night to support optimal immune function.</p>
-                        
-                        <h3>Exercise Moderately</h3>
-                        <p>Regular, moderate exercise can reduce inflammation and help immune cells regenerate regularly. However, intense, prolonged exercise without adequate recovery can temporarily suppress immune function. Aim for a balanced approach with both cardio and strength training.</p>
-                        
-                        <h3>Stress Management</h3>
-                        <p>Chronic stress suppresses the immune response by releasing the hormone cortisol. Incorporate stress-reduction practices such as meditation, deep breathing exercises, or mindfulness into your daily routine to keep your immune system functioning at its best.</p>
-                        
-                        <h3>Other Lifestyle Factors</h3>
-                        <p>Additional ways to support your immune system include:</p>
-                        <ul>
-                            <li>Maintaining a healthy weight</li>
-                            <li>Avoiding smoking and limiting alcohol consumption</li>
-                            <li>Practicing good hygiene to prevent infections</li>
-                            <li>Staying up to date with recommended vaccinations</li>
-                        </ul>
-                        
-                        <p>Remember that a holistic approach works best when it comes to immune health. No single supplement or food can magically boost your immunity, but consistent healthy habits can significantly support your body's natural defenses.</p>
-                    </div>
-                </div>
-                
-                <div class="blog-full" id="blog-3">
-                    <a href="#" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-                    <div class="blog-header">
-                        <div class="blog-meta">
-                            <span class="blog-date">April 10, 2025</span>
-                            <span class="blog-category">Mental Health</span>
-                        </div>
-                        <h2>The Mind-Body Connection: Managing Stress Effectively</h2>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mental Health" class="blog-featured-image">
-                    <div class="blog-content-full">
-                        <p>The connection between our mental and physical health is more profound than we often realize. Chronic stress doesn't just affect your mood—it can have tangible effects on your body, contributing to everything from digestive issues to cardiovascular problems. Understanding this mind-body connection is the first step toward managing stress effectively.</p>
-                        
-                        <h3>How Stress Affects Your Body</h3>
-                        <p>When you experience stress, your body releases hormones like cortisol and adrenaline. These hormones prepare your body for a "fight or flight" response. While this is helpful in short-term dangerous situations, chronic activation of this response can lead to:</p>
-                        <ul>
-                            <li>Elevated blood pressure and heart rate</li>
-                            <li>Weakened immune system</li>
-                            <li>Digestive problems</li>
-                            <li>Muscle tension and pain</li>
-                            <li>Sleep disturbances</li>
-                            <li>Weight changes</li>
-                        </ul>
-                        
-                        <h3>Effective Stress Management Techniques</h3>
-                        <p>Fortunately, there are many evidence-based approaches to managing stress:</p>
-                        
-                        <h4>Mindfulness and Meditation</h4>
-                        <p>Regular mindfulness practice can change how your brain responds to stress. Even just 10 minutes of daily meditation can help reduce anxiety and improve emotional regulation. Apps like Headspace or Calm can guide beginners through the process.</p>
-                        
-                        <h4>Physical Activity</h4>
-                        <p>Exercise is a powerful stress reliever. It increases endorphins (your brain's "feel-good" neurotransmitters) and can serve as a meditation in motion. Find an activity you enjoy, whether it's yoga, running, dancing, or simply walking in nature.</p>
-                        
-                        <h4>Social Connection</h4>
-                        <p>Strong social ties can act as a buffer against stress. Make time for meaningful connections with friends and family, and don't hesitate to seek support when you need it.</p>
-                        
-                        <h4>Time Management</h4>
-                        <p>Feeling overwhelmed by responsibilities can significantly contribute to stress. Learning to prioritize tasks, set boundaries, and say "no" when necessary can help create a more manageable schedule.</p>
-                        
-                        <h4>Professional Support</h4>
-                        <p>If stress feels unmanageable, consider speaking with a mental health professional. Therapy can provide valuable tools for coping with stress and addressing underlying issues.</p>
-                        
-                        <h3>Creating a Stress-Resilient Lifestyle</h3>
-                        <p>Beyond specific techniques, building a lifestyle that naturally buffers against stress is key. This includes:</p>
-                        <ul>
-                            <li>Maintaining a consistent sleep schedule</li>
-                            <li>Eating a balanced diet</li>
-                            <li>Limiting caffeine and alcohol</li>
-                            <li>Making time for hobbies and relaxation</li>
-                            <li>Practicing gratitude</li>
-                        </ul>
-                        
-                        <p>Remember that some stress is a normal part of life, and complete elimination isn't the goal. Instead, focus on developing healthy coping mechanisms and creating a lifestyle that supports both mental and physical wellbeing.</p>
+                    
+                    <div class="portal-card">
+                        <h3>Mental Health Crisis</h3>
+                        <div class="emergency-number">988</div>
+                        <p>National Suicide & Crisis Lifeline - Available 24/7 for free, confidential support.</p>
                     </div>
                 </div>
             </div>
@@ -2009,8 +2653,11 @@
                         <li><a href="#" data-page="about">About</a></li>
                         <li><a href="#" data-page="services">Services</a></li>
                         <li><a href="#" data-page="appointment">Appointments</a></li>
+                        <li><a href="#" data-page="patient-portal">Patient Portal</a></li>
+                        <li><a href="#" data-page="telemedicine">Telemedicine</a></li>
                         <li><a href="#" data-page="testimonials">Testimonials</a></li>
                         <li><a href="#" data-page="blog">Blog</a></li>
+                        <li><a href="#" data-page="emergency">Emergency Info</a></li>
                         <li><a href="#" data-page="contact">Contact</a></li>
                     </ul>
                 </div>
@@ -2022,6 +2669,7 @@
                         <li><a href="#" data-page="services">Vaccinations</a></li>
                         <li><a href="#" data-page="services">Health Counseling</a></li>
                         <li><a href="#" data-page="services">Minor Procedures</a></li>
+                        <li><a href="#" data-page="services">Prescription Refills</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
@@ -2069,6 +2717,7 @@
                         <option value="counseling">Health Counseling</option>
                         <option value="procedure">Minor Procedure</option>
                         <option value="screening">Health Screening</option>
+                        <option value="telemedicine">Telemedicine</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
@@ -2341,6 +2990,41 @@
                 alert('Thank you for your appointment request! We will contact you soon to confirm your booking.');
                 this.reset();
                 bookOnlineModal.classList.remove('active');
+            });
+            
+            // Patient Portal Navigation
+            const portalNavItems = document.querySelectorAll('.portal-nav-item');
+            const portalSections = document.querySelectorAll('.portal-section');
+            
+            portalNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Update active nav item
+                    portalNavItems.forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    portalSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(`${sectionId}-section`).classList.add('active');
+                });
+            });
+            
+            // Health Tracking Data Input
+            const trackingInputs = document.querySelectorAll('.data-input button');
+            
+            trackingInputs.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    if (input.value) {
+                        alert(`Data recorded: ${input.value}`);
+                        input.value = '';
+                    }
+                });
             });
             
             // Enhanced AI Chat Assistant
@@ -2675,6 +3359,48 @@
                     element.classList.add('appear');
                 });
             }, 100);
+            
+            // Accessibility Features
+            const contrastToggle = document.getElementById('contrastToggle');
+            const textSizeIncrease = document.getElementById('textSizeIncrease');
+            const textSizeDecrease = document.getElementById('textSizeDecrease');
+            const screenReaderHelp = document.getElementById('screenReaderHelp');
+            
+            // High Contrast Toggle
+            contrastToggle.addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                const isHighContrast = document.body.classList.contains('high-contrast');
+                this.title = isHighContrast ? 'Normal Contrast Mode' : 'High Contrast Mode';
+                alert(isHighContrast ? 'High contrast mode enabled' : 'High contrast mode disabled');
+            });
+            
+            // Text Size Controls
+            let currentTextSize = 1;
+            
+            textSizeIncrease.addEventListener('click', function() {
+                if (currentTextSize < 1.4) {
+                    currentTextSize += 0.1;
+                    document.body.style.fontSize = `${currentTextSize}rem`;
+                    alert(`Text size increased to ${Math.round(currentTextSize * 100)}%`);
+                } else {
+                    alert('Maximum text size reached');
+                }
+            });
+            
+            textSizeDecrease.addEventListener('click', function() {
+                if (currentTextSize > 0.8) {
+                    currentTextSize -= 0.1;
+                    document.body.style.fontSize = `${currentTextSize}rem`;
+                    alert(`Text size decreased to ${Math.round(currentTextSize * 100)}%`);
+                } else {
+                    alert('Minimum text size reached');
+                }
+            });
+            
+            // Screen Reader Help
+            screenReaderHelp.addEventListener('click', function() {
+                alert('This website is designed to be accessible with screen readers. Use headings to navigate between sections, and ensure your screen reader is set to read all interactive elements.');
+            });
         });
     </script>
 </body>
